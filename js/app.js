@@ -109,7 +109,7 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-      this.health = health - 1;
+      this.health = health - 0.5;
     } else if (this.speed === "Walking") {
       this.food = food - 0.6;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -117,7 +117,7 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-      this.health = health - 0.8;
+      this.health = health - 0.3;
     } else if (this.speed === "Strolling") {
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -125,7 +125,7 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-      this.health = health - 0.5;
+      this.health = health - 0.2;
     } else if (this.speed === "Stopped") {
       this.food = food - 0.3;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -133,7 +133,7 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-      this.health = health - 0.3;
+      this.health = health - 0.1;
     }
   },
   statsDecrease: function() {
