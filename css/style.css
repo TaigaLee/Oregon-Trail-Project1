@@ -1,0 +1,25 @@
+body {
+  font-family: "Oswald", sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+#start-button {
+  width: 10em;
+  height: 5em;
+  margin: 20px;
+}
+
+#name-entry-input {
+  text-align: center;
+  width: 10em;
+}
+
+#welcome-image {
+  width: 70%;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}

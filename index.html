@@ -2,6 +2,11 @@
 <html>
   <head>
     <title>Oregon Trail Mini Version</title>
+    <link
+      href="https://fonts.googleapis.com/css?family=Oswald&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
@@ -9,11 +14,16 @@
       <h1>Welcome to the Oregon Trail</h1>
       <div id="name-entry">
         <h2>What is your name?</h2>
+
         <input type="text" id="name-entry-input" placeholder="Name" />
       </div>
-
-      <button type="button" name="button">Start</button>
+      <button type="button" name="button" id="start-button">Start</button>
     </div>
+    <img
+      id="welcome-image"
+      src="https://cdn.vox-cdn.com/thumbor/5UOEwi1yQauMOb0fD5bqGqmLcbA=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378408/hangingoutwithoxen.0.png"
+      alt="Oregon-Trail-Welcome-Image"
+    />
 
     <script src="js/app.js"></script>
   </body>
