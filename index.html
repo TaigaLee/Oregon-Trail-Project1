@@ -8,6 +8,7 @@
     />
 
     <link rel="stylesheet" href="css/style.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.js"></script>
   </head>
   <body>
     <div class="welcome-screen">
@@ -17,13 +18,19 @@
 
         <input type="text" id="name-entry-input" placeholder="Name" />
       </div>
-      <button type="button" name="button" id="start-button">Start</button>
+      <button type="button" id="start-button">Start</button>
+      <img
+        id="welcome-image"
+        src="https://cdn.vox-cdn.com/thumbor/5UOEwi1yQauMOb0fD5bqGqmLcbA=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378408/hangingoutwithoxen.0.png"
+        alt="Oregon-Trail-Welcome-Image"
+      />
     </div>
-    <img
-      id="welcome-image"
-      src="https://cdn.vox-cdn.com/thumbor/5UOEwi1yQauMOb0fD5bqGqmLcbA=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378408/hangingoutwithoxen.0.png"
-      alt="Oregon-Trail-Welcome-Image"
-    />
+
+    <div class="game-screen">
+      <div class="stats-bar"></div>
+      <div class="main-game-image"></div>
+      <div class="speed-buttons"></div>
+    </div>
 
     <script src="js/app.js"></script>
   </body>
