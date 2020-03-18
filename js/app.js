@@ -22,6 +22,7 @@ const game = {
   wagon: {
     health: 100
   },
+  speed: "Stopped",
   startGame: function(pName) {
     const player = new Pioneer(pName);
     $(".welcome-screen").remove();
@@ -43,7 +44,6 @@ const game = {
       `Hello ${player.characterName}! You're about to embark on a journey through the Oregon Trail.`
     );
     $message.append("<button id='next-button'>Next</button>");
-    console.log(player.characterName);
     $stats.append($dayTracker);
     $stats.append($distanceTracker);
     $stats.append($foodTracker);
@@ -51,7 +51,6 @@ const game = {
     $(".main-game-image").append(
       $("<img id='main-game-image' src=https://i.imgur.com/XLTUCpX.png>")
     );
-    // $(".message-box").append()
     $walkButtons.append($("<button id='run-button'>Run</button>"));
     $walkButtons.append($("<button id='walk-button'>Walk</button>"));
     $walkButtons.append($("<button id='stroll-button'>Stroll</button>"));
@@ -65,10 +64,49 @@ const game = {
     $message.text(
       `You currently have $${this.money}, your health points are at ${this.health}, you have no illnesses, and your wagon has ${this.wagon.health} health points. Please choose a speed to start walking.`
     );
+  },
+  decideSpeed: function(speed) {
+    const $speedTracker = $(
+      "<h2 id='speed'>Current Speed: " + this.speed + "</h2>"
+    );
+    $(".speed-display").append($speedTracker);
+    const $speedDisplay = $(".speed-display");
+    if (speed === "run") {
+      this.speed = "Running";
+      $speedDisplay.text(`Current speed: ${this.speed}`);
+    } else if (speed === "walk") {
+      this.speed = "Walking";
+      $speedDisplay.text(`Current speed: ${this.speed}`);
+    } else if (speed === "stroll") {
+      this.speed = "Strolling";
+      $speedDisplay.text(`Current speed: ${this.speed}`);
+    } else if (speed === "stop") {
+      this.speed = "Stopped";
+      $speedDisplay.text(`Current speed: ${this.speed}`);
+    }
+  },
+  timer: function() {
+    console.log("placeholder");
   }
 };
 
 $("#start-button").on("click", function() {
   const pName = $("#name-entry-input").val();
   game.startGame(pName);
+});
+
+$("body").on("click", "#run-button", function() {
+  game.decideSpeed("run");
+});
+
+$("body").on("click", "#walk-button", function() {
+  game.decideSpeed("walk");
+});
+
+$("body").on("click", "#stroll-button", function() {
+  game.decideSpeed("stroll");
+});
+
+$("body").on("click", "#stop-button", function() {
+  game.decideSpeed("stop");
 });

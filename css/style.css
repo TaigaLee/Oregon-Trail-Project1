@@ -60,3 +60,9 @@ button {
   width: 5em;
   margin-top: 40px;
 }
+
+.speed-display {
+  font-family: "Oswald", sans-serif;
+  font-size: 25px;
+  margin-top: 10px;
+}
