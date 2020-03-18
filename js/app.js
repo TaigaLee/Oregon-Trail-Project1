@@ -22,6 +22,8 @@ const game = {
   wagon: {
     health: 100
   },
+  playerTimer: 0,
+  currentTime: 0,
   speed: "Stopped",
   startGame: function(pName) {
     const player = new Pioneer(pName);
@@ -62,8 +64,9 @@ const game = {
   displayStats: function() {
     const $message = $(".message-box");
     $message.text(
-      `You currently have $${this.money}, your health points are at ${this.health}, you have no illnesses, and your wagon has ${this.wagon.health} health points. Please choose a speed to start walking.`
+      `You currently have $${this.money}, your health points are at ${this.health}, you have no illnesses, and your wagon has ${this.wagon.health} health points. Are you ready to begin? You will start walking.`
     );
+    $message.append("<button id='yesStart'>Ok</button>");
   },
   decideSpeed: function(speed) {
     const $speedTracker = $(
@@ -86,7 +89,16 @@ const game = {
     }
   },
   timer: function() {
-    console.log("placeholder");
+    this.playerTimer = setInterval(function() {
+      game.currentTime++;
+      game.statsChanger();
+    }, 5000);
+  },
+  statsChanger: function() {
+    if (this.currentTime % 60 === 0) {
+      this.days++;
+      $("#days").text(`Day: ${this.days}`);
+    }
   }
 };
 
@@ -109,4 +121,11 @@ $("body").on("click", "#stroll-button", function() {
 
 $("body").on("click", "#stop-button", function() {
   game.decideSpeed("stop");
+});
+
+$("body").on("click", "#yesStart", function() {
+  game.decideSpeed("walk");
+  $(".message-box").text("Off you go!");
+  $("#yesStart").remove();
+  game.timer();
 });
