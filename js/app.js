@@ -1,23 +1,22 @@
-// creates the pioneer and his family
+// creates the pioneer
 class Pioneer {
   constructor(characterName) {
     this.characterName = characterName;
   }
-
-  // getName() {
-  //   const playerName = $("#name-entry-input").value;
-  // }
 }
+
+// class AnimalToHunt {
+//   this.value
+// }
 
 // game object
 
 const game = {
-  money: 500,
+  money: 100,
   food: 200,
   days: 0,
   distance: 0,
   health: 100,
-  illness: null,
   healthStatus: "Good",
   wagon: {
     health: 100
@@ -30,12 +29,14 @@ const game = {
     $(".welcome-screen").remove();
     const $gameScreen = $(".game-screen");
     const $stats = $(".stats-bar");
-    const $walkButtons = $(".speed-buttons");
     const $dayTracker = $("<h2 id='days'>Day: " + this.days + "</h2>");
     const $foodTracker = $("<h2 id='food'>Food: " + this.food + "</h2>");
     const $moneyTracker = $("<h2 id='money'>Money: " + this.money + "</h2>");
     const $distanceTracker = $(
       "<h2 id='distance'>Distance Travelled: " + this.distance + "</h2>"
+    );
+    const $healthTracker = $(
+      "<h2 id='health'>Health: " + this.healthStatus + "</h2>"
     );
     const $message = $(".message-box");
     $message.css("width", "500px");
@@ -49,14 +50,11 @@ const game = {
     $stats.append($dayTracker);
     $stats.append($distanceTracker);
     $stats.append($foodTracker);
+    $stats.append($healthTracker);
     $stats.append($moneyTracker);
     $(".main-game-image").append(
       $("<img id='main-game-image' src=https://i.imgur.com/XLTUCpX.png>")
     );
-    $walkButtons.append($("<button id='run-button'>Run</button>"));
-    $walkButtons.append($("<button id='walk-button'>Walk</button>"));
-    $walkButtons.append($("<button id='stroll-button'>Stroll</button>"));
-    $walkButtons.append($("<button id='stop-button'>Stop</button>"));
     $("#next-button").on("click", function() {
       game.displayStats();
     });
@@ -93,43 +91,74 @@ const game = {
       game.currentTime++;
       game.statsChanger();
       game.statsDecrease();
+      console.log(game.health);
     }, 1000);
+    setInterval(function() {
+      console.log(game.currentTime);
+      game.hunt();
+    }, 80000);
   },
   statsChanger: function(speed) {
     let distance = this.distance;
+    let food = this.food;
+    let health = this.health;
     if (this.speed === "Running") {
+      this.food = food - 0.8;
+      $("#food").text(`Food: ${this.food.toFixed(1)}`);
+      this.distance = distance + 0.3;
+      $("#distance").text(
+        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+      );
+      this.health = health - 1;
+    } else if (this.speed === "Walking") {
+      this.food = food - 0.6;
+      $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.2;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-    } else if (this.speed === "Walking") {
+      this.health = health - 0.8;
+    } else if (this.speed === "Strolling") {
+      this.food = food - 0.5;
+      $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.1;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-    } else if (this.speed === "Strolling") {
-      this.distance = distance + 0.05;
-      $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(2)} miles`
-      );
+      this.health = health - 0.5;
     } else if (this.speed === "Stopped") {
+      this.food = food - 0.3;
+      $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
+      this.health = health - 0.3;
     }
   },
   statsDecrease: function() {
-    console.log(this.currentTime);
+    // console.log(this.currentTime);
     let food = this.food;
     if (this.currentTime % 60 === 0) {
       this.days++;
       $("#days").text(`Day: ${this.days}`);
     }
-    if (this.currentTime % 10 === 0) {
-      this.food = food - 10;
-      $("#food").text(`Food: ${this.food}`);
+    if (this.health <= 80 && this.health >= 40) {
+      this.healthStatus = "Decent";
+      $("#health").text(`Health: ${this.healthStatus}`);
+    } else if (this.health < 40 && this.health >= 20) {
+      this.healthStatus = "Bad";
+      $("#health").text(`Health: ${this.healthStatus}`);
+    } else if (this.health < 20 && this.health > 5) {
+      this.healthStatus = "About to die";
+      $("#health").text(`Health: ${this.healthStatus}`);
+    } else if (this.health === 0) {
+      this.healthStatus = "Dead";
+      $("#health").text(`Health: ${this.healthStatus}`);
     }
+  },
+  hunt: function() {
+    console.log("placeholder");
   }
 };
 
@@ -162,6 +191,13 @@ $("body").on("click", "#yesStart", function() {
   function fade() {
     $(".message-box").text("");
   }
-
+  const $walkButtons = $(".speed-buttons");
+  setTimeout(makeButtons, 2500);
+  function makeButtons() {
+    $walkButtons.append($("<button id='run-button'>Run</button>"));
+    $walkButtons.append($("<button id='walk-button'>Walk</button>"));
+    $walkButtons.append($("<button id='stroll-button'>Stroll</button>"));
+    $walkButtons.append($("<button id='stop-button'>Stop</button>"));
+  }
   game.timer();
 });
