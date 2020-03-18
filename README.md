@@ -13,3 +13,5 @@ Players will be tasked with selecting yes or no on random interactions such as â
 User can die of illness, starvation, or if the game hits winter. His family will die first.
 
 The user will win the game after travelling 500 miles (traveling 15 miles a day, ~ 30 days of regular paced walking). Winter comes after 38 days.
+
+![first wireframe board](https://i.imgur.com/D8Wpuyk.jpg)
