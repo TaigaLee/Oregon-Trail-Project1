@@ -2,9 +2,6 @@
 class Pioneer {
   constructor(characterName) {
     this.characterName = characterName;
-    this.health = 100;
-    this.illness = null;
-    this.healthStatus = "Excellent";
   }
 
   // getName() {
@@ -19,6 +16,9 @@ const game = {
   food: 200,
   days: 0,
   distance: 0,
+  health: 100,
+  illness: null,
+  healthStatus: "Good",
   wagon: {
     health: 100
   },
@@ -42,6 +42,7 @@ const game = {
     $message.text(
       `Hello ${player.characterName}! You're about to embark on a journey through the Oregon Trail.`
     );
+    $message.append("<button id='next-button'>Next</button>");
     console.log(player.characterName);
     $stats.append($dayTracker);
     $stats.append($distanceTracker);
@@ -55,6 +56,15 @@ const game = {
     $walkButtons.append($("<button id='walk-button'>Walk</button>"));
     $walkButtons.append($("<button id='stroll-button'>Stroll</button>"));
     $walkButtons.append($("<button id='stop-button'>Stop</button>"));
+    $("#next-button").on("click", function() {
+      game.displayStats();
+    });
+  },
+  displayStats: function() {
+    const $message = $(".message-box");
+    $message.text(
+      `You currently have $${this.money}, your health points are at ${this.health}, you have no illnesses, and your wagon has ${this.wagon.health} health points. Please choose a speed to start walking.`
+    );
   }
 };
 
