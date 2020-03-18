@@ -92,26 +92,43 @@ const game = {
     this.playerTimer = setInterval(function() {
       game.currentTime++;
       game.statsChanger();
-    }, 5000);
+      game.statsDecrease();
+    }, 1000);
   },
   statsChanger: function(speed) {
     let distance = this.distance;
     if (this.speed === "Running") {
-      this.distance = distance + 2;
-      $("#distance").text(`Distance Travelled: ${this.distance}`);
+      this.distance = distance + 0.2;
+      $("#distance").text(
+        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+      );
     } else if (this.speed === "Walking") {
-      this.distance++;
-      $("#distance").text(`Distance Travelled: ${this.distance}`);
+      this.distance = distance + 0.1;
+      $("#distance").text(
+        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+      );
     } else if (this.speed === "Strolling") {
-      this.distance = distance + 0.5;
-      $("#distance").text(`Distance Travelled: ${this.distance}`);
+      this.distance = distance + 0.05;
+      $("#distance").text(
+        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+      );
     } else if (this.speed === "Stopped") {
       this.distance = distance;
-      $("#distance").text(`Distance Travelled: ${this.distance}`);
+      $("#distance").text(
+        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+      );
     }
+  },
+  statsDecrease: function() {
+    console.log(this.currentTime);
+    let food = this.food;
     if (this.currentTime % 60 === 0) {
       this.days++;
       $("#days").text(`Day: ${this.days}`);
+    }
+    if (this.currentTime % 10 === 0) {
+      this.food = food - 10;
+      $("#food").text(`Food: ${this.food}`);
     }
   }
 };
