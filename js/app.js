@@ -94,7 +94,21 @@ const game = {
       game.statsChanger();
     }, 5000);
   },
-  statsChanger: function() {
+  statsChanger: function(speed) {
+    let distance = this.distance;
+    if (this.speed === "Running") {
+      this.distance = distance + 2;
+      $("#distance").text(`Distance Travelled: ${this.distance}`);
+    } else if (this.speed === "Walking") {
+      this.distance++;
+      $("#distance").text(`Distance Travelled: ${this.distance}`);
+    } else if (this.speed === "Strolling") {
+      this.distance = distance + 0.5;
+      $("#distance").text(`Distance Travelled: ${this.distance}`);
+    } else if (this.speed === "Stopped") {
+      this.distance = distance;
+      $("#distance").text(`Distance Travelled: ${this.distance}`);
+    }
     if (this.currentTime % 60 === 0) {
       this.days++;
       $("#days").text(`Day: ${this.days}`);
@@ -125,7 +139,12 @@ $("body").on("click", "#stop-button", function() {
 
 $("body").on("click", "#yesStart", function() {
   game.decideSpeed("walk");
-  $(".message-box").text("Off you go!");
   $("#yesStart").remove();
+  $(".message-box").text("Off you go!");
+  setTimeout(fade, 3000);
+  function fade() {
+    $(".message-box").text("");
+  }
+
   game.timer();
 });
