@@ -103,7 +103,7 @@ const game = {
     let distance = this.distance;
     let food = this.food;
     let health = this.health;
-    if (this.speed === "Running") {
+    if (this.speed === "Running" && this.food > 0) {
       this.food = food - 0.8;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.3;
@@ -112,7 +112,7 @@ const game = {
       );
       this.health = health - 0.5;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
-    } else if (this.speed === "Walking") {
+    } else if (this.speed === "Walking" && this.food > 0) {
       this.food = food - 0.6;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.2;
@@ -121,7 +121,7 @@ const game = {
       );
       this.health = health - 0.3;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
-    } else if (this.speed === "Strolling") {
+    } else if (this.speed === "Strolling" && this.food > 0) {
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.1;
@@ -130,17 +130,15 @@ const game = {
       );
       this.health = health - 0.2;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
-    } else if (this.speed === "Stopped") {
+    } else if (this.speed === "Stopped" && this.food > 0 && this.health < 99) {
       this.food = food - 0.3;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-      if (this.health < 99) {
-        this.health = health + 1;
-        $("#hp").text(`HP: ${this.health.toFixed(1)}`);
-      }
+      this.health = health + 1;
+      $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     }
   },
   statsDecrease: function() {
@@ -188,11 +186,11 @@ const game = {
       $(".boxButtons").append($noButton);
     }
   },
-  interactionOptions: function(option) {
+  interactionOptionsBox: function(option) {
     let random = Math.floor(Math.random() * 2);
-    function pauseGame() {
-      // const health = this.health;
-    }
+    console.log(food);
+    console.log(health);
+    clearInterval(this.playerTimer);
     function removeStuff() {
       $("#empty-crate").remove();
       $("#boxquestion").remove();
@@ -202,7 +200,6 @@ const game = {
     if (option === "box") {
       if (random === 0) {
         removeStuff();
-        this.health = this.health - 40;
         const $badStatus = $(
           "<h2>The crate contained a hoard of wasps. You managed to escape, but at the expense of getting stung quite a few times.</h2>"
         );
@@ -212,7 +209,9 @@ const game = {
             "<img id='wasp' src='https://i.pinimg.com/originals/5c/31/e5/5c31e5a18cd365132db3c2dfa6164df7.jpg'>"
           )
         );
-        $(".boxInfo").append($("<button id='boxOk'>Ok</button>"));
+        $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
+        this.health += 40;
+        this.saveStats();
       } else {
         removeStuff();
         const $goodStatus = $(
@@ -224,9 +223,21 @@ const game = {
             "<img id='box-food' src='https://media.istockphoto.com/vectors/wooden-crate-with-vegetables-and-fruits-healthy-lifestyle-vector-id872797682?k=6&m=872797682&s=612x612&w=0&h=RBRmFOCRloSF16rWowwavFnAZuCi361PIjGtShH3zpw='>"
           )
         );
-        $(".boxInfo").append($("<button id='boxOk'>Ok</button>"));
-        this.food = this.food + 25;
+        $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
+        this.food += 30;
+        this.saveStats();
       }
+    } else if (option === "noBox") {
+      removeStuff();
+      const $interactionDiv = $(".boxInfo");
+      const $interaction1Image = $(
+        "<img id='empty-crate' src='https://media.istockphoto.com/vectors/wooden-box-vector-id525222158?k=6&m=525222158&s=612x612&w=0&h=j15ZHXP7Y-9VSLkcto5On4CgClEhZb-8Eq1QyWDKDY8='>"
+      );
+      $interactionDiv.append(
+        "<h1>You decided to leave the crate alone and proceed on. </h1>"
+      );
+      $interactionDiv.append($interaction1Image);
+      $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
     }
   },
   starvingAndIllness: function() {
@@ -236,6 +247,17 @@ const game = {
     if (this.health <= 0) {
       console.log("YOU'RE DEAD");
     }
+  },
+  resumeGame: function() {
+    $(".game-screen").show();
+  },
+  saveStats: function() {
+    const health = this.health;
+    const food = this.food;
+    const distance = this.distance;
+    $("#health").text(`Health: ${this.health}`);
+    $("#food").text(`Food: ${this.food}`);
+    $("#distance").text(`Distance Travelled: ${this.distance}`);
   }
 };
 
@@ -283,6 +305,17 @@ $("body").on("click", "#yesStart", function() {
   game.timer();
 });
 
-$("body").on("click", ".boxButtons", function() {
-  game.interactionOptions("box");
+$("body").on("click", "#yesBox", function() {
+  game.interactionOptionsBox("box");
+});
+
+$("body").on("click", "#noBox", function() {
+  game.interactionOptionsBox("noBox");
+});
+
+$("body").on("click", ".boxOk", function() {
+  $(".boxInfo").remove();
+  $(".boxButtons").remove();
+  game.resumeGame();
+  game.timer();
 });
