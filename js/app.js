@@ -177,7 +177,7 @@ const game = {
         "<h2 id='boxquestion'>Would you like to open it at your own risk?</h2>"
       );
       const $interaction1Image = $(
-        "<img src='https://media.istockphoto.com/vectors/wooden-box-vector-id525222158?k=6&m=525222158&s=612x612&w=0&h=j15ZHXP7Y-9VSLkcto5On4CgClEhZb-8Eq1QyWDKDY8='>"
+        "<img id='empty-crate' src='https://media.istockphoto.com/vectors/wooden-box-vector-id525222158?k=6&m=525222158&s=612x612&w=0&h=j15ZHXP7Y-9VSLkcto5On4CgClEhZb-8Eq1QyWDKDY8='>"
       );
       const $yesButton = $("<button id='yesBox'>Yes</button>");
       const $noButton = $("<button id='noBox'>No</button>");
@@ -190,11 +190,42 @@ const game = {
   },
   interactionOptions: function(option) {
     let random = Math.floor(Math.random() * 2);
+    function pauseGame() {
+      // const health = this.health;
+    }
+    function removeStuff() {
+      $("#empty-crate").remove();
+      $("#boxquestion").remove();
+      $("#boxstatement").remove();
+      $(".boxButtons").remove();
+    }
     if (option === "box") {
       if (random === 0) {
-        console.log("LOSE HP");
+        removeStuff();
+        this.health = this.health - 40;
+        const $badStatus = $(
+          "<h2>The crate contained a hoard of wasps. You managed to escape, but at the expense of getting stung quite a few times.</h2>"
+        );
+        $(".boxInfo").append($badStatus);
+        $(".boxInfo").append(
+          $(
+            "<img id='wasp' src='https://i.pinimg.com/originals/5c/31/e5/5c31e5a18cd365132db3c2dfa6164df7.jpg'>"
+          )
+        );
+        $(".boxInfo").append($("<button id='boxOk'>Ok</button>"));
       } else {
-        console.log("WIN HP");
+        removeStuff();
+        const $goodStatus = $(
+          "<h2>The crate contained a bunch of food! It must've dropped off of someone else's wagon, but it's yours now!</h2>"
+        );
+        $(".boxInfo").append($goodStatus);
+        $(".boxInfo").append(
+          $(
+            "<img id='box-food' src='https://media.istockphoto.com/vectors/wooden-crate-with-vegetables-and-fruits-healthy-lifestyle-vector-id872797682?k=6&m=872797682&s=612x612&w=0&h=RBRmFOCRloSF16rWowwavFnAZuCi361PIjGtShH3zpw='>"
+          )
+        );
+        $(".boxInfo").append($("<button id='boxOk'>Ok</button>"));
+        this.food = this.food + 25;
       }
     }
   },
@@ -252,6 +283,6 @@ $("body").on("click", "#yesStart", function() {
   game.timer();
 });
 
-$("body").on("click", "#yesBox", function() {
+$("body").on("click", ".boxButtons", function() {
   game.interactionOptions("box");
 });

@@ -80,3 +80,12 @@ button {
 .interaction button {
   margin: 50px 100px;
 }
+
+.boxInfo button {
+  display: block;
+  margin: 40px auto;
+}
+
+#wasp {
+  width: 50%;
+}
