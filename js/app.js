@@ -169,10 +169,27 @@ const game = {
   interact: function(num) {
     if (num === 1) {
       $(".game-screen").hide();
-      const $interactionDiv = $(".interaction");
-      const $interaction1 = $("<h1 id='boxstatement'>You've found a box!</h1>");
+      const $interactionDiv = $(".boxInfo");
+      const $interaction1 = $(
+        "<h1 id='boxstatement'>You've found a crate on the side of the road!</h1>"
+      );
+      const $interaction1Quest = $(
+        "<h2 id='boxquestion'>Would you like to open it at your own risk?</h2>"
+      );
+      const $interaction1Image = $(
+        "<img src='https://media.istockphoto.com/vectors/wooden-box-vector-id525222158?k=6&m=525222158&s=612x612&w=0&h=j15ZHXP7Y-9VSLkcto5On4CgClEhZb-8Eq1QyWDKDY8='>"
+      );
+      const $yesButton = $("<button id='yesBox'>Yes</button>");
+      const $noButton = $("<button id='noBox'>No</button>");
       $interactionDiv.append($interaction1);
+      $interactionDiv.append($interaction1Quest);
+      $interactionDiv.append($interaction1Image);
+      $(".boxButtons").append($yesButton);
+      $(".boxButtons").append($noButton);
     }
+  },
+  interactionOptions: function() {
+    console.log("placeholder");
   }
 };
 
@@ -214,6 +231,7 @@ $("body").on("click", "#yesStart", function() {
     $walkButtons.append($("<button id='stop-button'>Rest</button>"));
   }
   setTimeout(function() {
+    let random = Math.floor(Math.random() * 3) + 1;
     game.interact(1);
   }, 5000);
   game.timer();
