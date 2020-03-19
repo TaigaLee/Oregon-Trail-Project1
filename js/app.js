@@ -166,8 +166,8 @@ const game = {
   },
   interact: function(num) {
     if (num === 1) {
-      $(".game-screen").hide();
       const $interactionDiv = $(".boxInfo");
+      $(".game-screen").hide();
       const $interaction1 = $(
         "<h1 id='boxstatement'>You've found a crate on the side of the road!</h1>"
       );
@@ -184,6 +184,32 @@ const game = {
       $interactionDiv.append($interaction1Image);
       $(".boxButtons").append($yesButton);
       $(".boxButtons").append($noButton);
+    } else if (num === 2) {
+      const $riverDiv = $(".riverInfo");
+      const $riverButtons = $(".riverButtons");
+      $(".game-screen").hide();
+      const $riverInteraction1 = $(
+        "<h1 id='riverStatement'>There's a river that up ahead. What would you like to do? </h1>"
+      );
+      $riverDiv.append($riverInteraction1);
+      $riverDiv.append(
+        $(
+          "<img id='riverImage' src='https://format-magazine-production-res.cloudinary.com/image/upload/c_crop,h_388,w_465,x_154,y_0,f_jpg,f_auto/dpr_3.0/c_scale,w_767,h_639/A-River-Crossing-on-The-Oregon-Trail'>"
+        )
+      );
+      $riverButtons.append(
+        $(
+          "<button id=longRoute>Take the long route (adds on 3 additional days)</button>"
+        )
+      );
+      $riverButtons.append(
+        $("<button id=cross>Cross the river with your wagon</button>")
+      );
+      $riverButtons.append(
+        $(
+          "<button id=waitADay>Wait one day to see if the current dies down</button>"
+        )
+      );
     }
   },
   interactionOptionsBox: function(option) {
@@ -210,7 +236,7 @@ const game = {
           )
         );
         $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
-        this.health += 40;
+        this.health -= 40;
         this.saveStats();
       } else {
         removeStuff();
@@ -261,6 +287,8 @@ const game = {
   }
 };
 
+//event listeners
+
 $("#start-button").on("click", function() {
   const pName = $("#name-entry-input").val();
   game.startGame(pName);
@@ -284,24 +312,35 @@ $("body").on("click", "#stop-button", function() {
 
 $("body").on("click", "#yesStart", function() {
   game.decideSpeed("walk");
+
   $("#yesStart").remove();
+
   $(".message-box").text("Off you go!");
+
   setTimeout(fade, 3000);
+
   function fade() {
     $(".message-box").text("");
   }
   const $walkButtons = $(".speed-buttons");
+
   setTimeout(makeButtons, 2500);
+
   function makeButtons() {
     $walkButtons.append($("<button id='run-button'>Run</button>"));
     $walkButtons.append($("<button id='walk-button'>Walk</button>"));
     $walkButtons.append($("<button id='stroll-button'>Stroll</button>"));
     $walkButtons.append($("<button id='stop-button'>Rest</button>"));
   }
+
   setTimeout(function() {
-    let random = Math.floor(Math.random() * 3) + 1;
     game.interact(1);
+  }, 60000);
+
+  setTimeout(function() {
+    game.interact(2);
   }, 5000);
+
   game.timer();
 });
 
