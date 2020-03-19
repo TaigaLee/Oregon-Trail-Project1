@@ -108,7 +108,7 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.3;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+        `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
       this.health = health - 0.5;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
@@ -117,7 +117,7 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.2;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+        `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
       this.health = health - 0.3;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
@@ -126,7 +126,7 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.1;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+        `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
       this.health = health - 0.2;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
@@ -135,7 +135,7 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(2)} miles`
+        `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
       this.health = health + 1;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
@@ -189,7 +189,7 @@ const game = {
       const $riverButtons = $(".riverButtons");
       $(".game-screen").hide();
       const $riverInteraction1 = $(
-        "<h1 id='riverStatement'>There's a river that up ahead. What would you like to do? </h1>"
+        "<h1 id='riverStatement'>There's a river up ahead. What would you like to do? </h1>"
       );
       $riverDiv.append($riverInteraction1);
       $riverDiv.append(
@@ -199,7 +199,7 @@ const game = {
       );
       $riverButtons.append(
         $(
-          "<button id=longRoute>Take the long route (adds on 3 additional days)</button>"
+          "<button id=longRoute>Take the long route (adds on 2 additional days)</button>"
         )
       );
       $riverButtons.append(
@@ -214,8 +214,6 @@ const game = {
   },
   interactionOptionsBox: function(option) {
     let random = Math.floor(Math.random() * 2);
-    console.log(food);
-    console.log(health);
     clearInterval(this.playerTimer);
     function removeStuff() {
       $("#empty-crate").remove();
@@ -266,6 +264,55 @@ const game = {
       $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
     }
   },
+  interactionOptionsRiver: function(answer) {
+    clearInterval(this.playerTimer);
+    $("#riverStatement").remove();
+    $("#cross").remove();
+    $("#longRoute").remove();
+    $("#waitADay").remove();
+    if (answer === "cross") {
+      $(".riverInfo").prepend(
+        $(
+          "<h1>You decided to cross the river right away. A lot of your food got wet and is no longer consumable.</h1>"
+        )
+      );
+      $("#riverImage").attr(
+        "src",
+        "https://cdn.vox-cdn.com/thumbor/oeNqqFIQsU_9Sfl1zhX4kSkJSGc=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378444/Screen_Shot_2015-02-02_at_2.51.49_PM.0.png"
+      );
+      $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
+      this.food -= 50;
+      this.saveStats();
+    } else if (answer === "wait") {
+      $(".riverInfo").prepend(
+        $(
+          "<h1>You decided to wait a day. The river calms down and you cross without any damage, but the hot sun causes you to have heat exhaustion.</h1>"
+        )
+      );
+      $("#riverImage").attr(
+        "src",
+        "https://i.ytimg.com/vi/MrgAD6V_V0A/hqdefault.jpg"
+      );
+      $("#riverImage").attr("id", "crossingRiver");
+      this.days++;
+      this.food -= 20;
+      this.health -= 35;
+      this.saveStats();
+      $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
+    } else if (answer === "longRoute") {
+      $(".riverInfo").prepend(
+        $(
+          "<h1>You decided to take the long way. You've lost two days, but didn't lose any extra health or food.</h1>"
+        )
+      );
+      $("#riverImage").attr("src", "https://i.imgur.com/2LIivqw.png");
+      this.days += 2;
+      this.food -= 40;
+      this.health -= 10;
+      this.saveStats();
+      $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
+    }
+  },
   starvingAndIllness: function() {
     console.log("placeholder");
   },
@@ -278,12 +325,14 @@ const game = {
     $(".game-screen").show();
   },
   saveStats: function() {
+    const days = this.days;
     const health = this.health;
     const food = this.food;
     const distance = this.distance;
-    $("#health").text(`Health: ${this.health}`);
-    $("#food").text(`Food: ${this.food}`);
-    $("#distance").text(`Distance Travelled: ${this.distance}`);
+    $("#health").text(`Health: ${this.health.toFixed(1)}`);
+    $("#food").text(`Food: ${this.food.toFixed(1)}`);
+    $("#distance").text(`Distance Travelled: ${this.distance.toFixed(1)}`);
+    $("#days").text(`Day: ${this.days}`);
   }
 };
 
@@ -335,11 +384,11 @@ $("body").on("click", "#yesStart", function() {
 
   setTimeout(function() {
     game.interact(1);
-  }, 60000);
+  }, 30000);
 
   setTimeout(function() {
     game.interact(2);
-  }, 5000);
+  }, 2000000);
 
   game.timer();
 });
@@ -355,6 +404,24 @@ $("body").on("click", "#noBox", function() {
 $("body").on("click", ".boxOk", function() {
   $(".boxInfo").remove();
   $(".boxButtons").remove();
+  game.resumeGame();
+  game.timer();
+});
+
+$("body").on("click", "#cross", function() {
+  game.interactionOptionsRiver("cross");
+});
+
+$("body").on("click", "#waitADay", function() {
+  game.interactionOptionsRiver("wait");
+});
+
+$("body").on("click", "#longRoute", function() {
+  game.interactionOptionsRiver("longRoute");
+});
+
+$("body").on("click", ".riverOk", function() {
+  $(".riverInfo").remove();
   game.resumeGame();
   game.timer();
 });
