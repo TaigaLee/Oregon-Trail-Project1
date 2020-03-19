@@ -64,7 +64,7 @@ const game = {
   displayStats: function() {
     const $message = $(".message-box");
     $message.text(
-      `You currently have $${this.money}, your health points are at ${this.health}, you have no illnesses, and your wagon has ${this.wagon.health} health points. Are you ready to begin? You will start walking.`
+      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You will have to reach Oregon before winter arrives, or else you are doomed. Are you ready to begin? You will start walking.`
     );
     $message.append("<button id='yesStart'>Ok</button>");
   },
@@ -333,6 +333,30 @@ const game = {
     $("#food").text(`Food: ${this.food.toFixed(1)}`);
     $("#distance").text(`Distance Travelled: ${this.distance.toFixed(1)}`);
     $("#days").text(`Day: ${this.days}`);
+  },
+  town: function() {
+    clearInterval(this.playerTimer);
+    $(".game-screen").hide();
+    const $townPrompt = $(
+      "<h1 id='townPrompt'>You've reached a town checkpoint. What would you like to do?</h1>"
+    );
+    const $townImage = $(
+      "<img id='townImage' src='https://static.turbosquid.com/Preview/001324/118/QY/_Z.jpg'>"
+    );
+    $(".town").append($townPrompt);
+    $(".town").append($townImage);
+    $(".townButtons").append(
+      $("<button id='moveOn'>Move on without stopping</button>")
+    );
+    $(".townButtons").append(
+      $("<button id='goToStore'>Stop by the store to buy goods.</button>")
+    );
+    $(".townButtons").append(
+      $("<button id='rest'>Rest a day to restore health.</button>")
+    );
+  },
+  randomVoiceLines: function() {
+    console.log("HI");
   }
 };
 
@@ -360,6 +384,7 @@ $("body").on("click", "#stop-button", function() {
 });
 
 $("body").on("click", "#yesStart", function() {
+  game.town();
   game.decideSpeed("walk");
 
   $("#yesStart").remove();
@@ -389,6 +414,10 @@ $("body").on("click", "#yesStart", function() {
   setTimeout(function() {
     game.interact(2);
   }, 2000000);
+
+  setTimeout(function() {
+    game.interact(2);
+  }, 5000000);
 
   game.timer();
 });
@@ -424,4 +453,7 @@ $("body").on("click", ".riverOk", function() {
   $(".riverInfo").remove();
   game.resumeGame();
   game.timer();
+  setTimeout(function() {
+    game.town();
+  }, 90000);
 });

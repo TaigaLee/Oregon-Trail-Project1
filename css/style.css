@@ -93,3 +93,12 @@ button {
 #riverImage {
   width: 40%;
 }
+
+#townImage {
+  width: 30%;
+  height: 40%;
+}
+
+.townButtons button {
+  margin: 40px 50px;
+}
