@@ -36,8 +36,9 @@ const game = {
       "<h2 id='distance'>Distance Travelled: " + this.distance + "</h2>"
     );
     const $healthTracker = $(
-      "<h2 id='health'>Health: " + this.healthStatus + "</h2>"
+      "<h2 id='health'>Status: " + this.healthStatus + "</h2>"
     );
+    const $hpTracker = $("<h2 id='hp'>Health: " + this.health + "</h2>");
     const $message = $(".message-box");
     $message.css("width", "500px");
     $message.css("height", "200px");
@@ -50,6 +51,7 @@ const game = {
     $stats.append($dayTracker);
     $stats.append($distanceTracker);
     $stats.append($foodTracker);
+    $stats.append($hpTracker);
     $stats.append($healthTracker);
     $stats.append($moneyTracker);
     $(".main-game-image").append(
@@ -91,7 +93,6 @@ const game = {
       game.currentTime++;
       game.statsChanger();
       game.statsDecrease();
-      console.log(game.health);
     }, 1000);
     setInterval(function() {
       console.log(game.currentTime);
@@ -110,6 +111,7 @@ const game = {
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
       this.health = health - 0.5;
+      $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (this.speed === "Walking") {
       this.food = food - 0.6;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -118,6 +120,7 @@ const game = {
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
       this.health = health - 0.3;
+      $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (this.speed === "Strolling") {
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -126,6 +129,7 @@ const game = {
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
       this.health = health - 0.2;
+      $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (this.speed === "Stopped") {
       this.food = food - 0.3;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -133,11 +137,13 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(2)} miles`
       );
-      this.health = health - 0.1;
+      if (this.health < 99) {
+        this.health = health + 1;
+        $("#hp").text(`HP: ${this.health.toFixed(1)}`);
+      }
     }
   },
   statsDecrease: function() {
-    // console.log(this.currentTime);
     let food = this.food;
     if (this.currentTime % 60 === 0) {
       this.days++;
@@ -159,6 +165,14 @@ const game = {
   },
   hunt: function() {
     console.log("placeholder");
+  },
+  interact: function(num) {
+    if (num === 1) {
+      $(".game-screen").hide();
+      const $interactionDiv = $(".interaction");
+      const $interaction1 = $("<h1 id='boxstatement'>You've found a box!</h1>");
+      $interactionDiv.append($interaction1);
+    }
   }
 };
 
@@ -197,7 +211,10 @@ $("body").on("click", "#yesStart", function() {
     $walkButtons.append($("<button id='run-button'>Run</button>"));
     $walkButtons.append($("<button id='walk-button'>Walk</button>"));
     $walkButtons.append($("<button id='stroll-button'>Stroll</button>"));
-    $walkButtons.append($("<button id='stop-button'>Stop</button>"));
+    $walkButtons.append($("<button id='stop-button'>Rest</button>"));
   }
+  setTimeout(function() {
+    game.interact(1);
+  }, 5000);
   game.timer();
 });
