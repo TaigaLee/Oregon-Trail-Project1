@@ -42,7 +42,7 @@ const game = {
     const $message = $(".message-box");
     $message.css("width", "500px");
     $message.css("height", "200px");
-    $message.css("border", "2px solid black");
+    $message.css("border", "2px solid white");
     $message.css("margin", "30px auto");
     $message.text(
       `Hello ${player.characterName}! You're about to embark on a journey through the Oregon Trail.`
@@ -188,8 +188,23 @@ const game = {
       $(".boxButtons").append($noButton);
     }
   },
-  interactionOptions: function() {
+  interactionOptions: function(option) {
+    let random = Math.floor(Math.random() * 2);
+    if (option === "box") {
+      if (random === 0) {
+        console.log("LOSE HP");
+      } else {
+        console.log("WIN HP");
+      }
+    }
+  },
+  starvingAndIllness: function() {
     console.log("placeholder");
+  },
+  deathConditions: function() {
+    if (this.health <= 0) {
+      console.log("YOU'RE DEAD");
+    }
   }
 };
 
@@ -235,4 +250,8 @@ $("body").on("click", "#yesStart", function() {
     game.interact(1);
   }, 5000);
   game.timer();
+});
+
+$("body").on("click", "#yesBox", function() {
+  game.interactionOptions("box");
 });
