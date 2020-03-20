@@ -93,6 +93,7 @@ const game = {
       game.currentTime++;
       game.statsChanger();
       game.statsDecrease();
+      game.starveCondition();
     }, 1000);
     setInterval(function() {
       console.log(game.currentTime);
@@ -313,8 +314,11 @@ const game = {
       $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
     }
   },
-  starvingAndIllness: function() {
-    console.log("placeholder");
+  starveCondition: function() {
+    if (this.food === 0) {
+      this.health -= 10;
+      this.saveStats();
+    }
   },
   deathConditions: function() {
     if (this.health <= 0) {
