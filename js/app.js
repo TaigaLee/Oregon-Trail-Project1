@@ -25,6 +25,7 @@ const game = {
   playerTimer: 0,
   currentTime: 0,
   speed: "Stopped",
+  total: 0,
   startGame: function(pName) {
     const player = new Pioneer(pName);
     $(".welcome-screen").remove();
@@ -32,12 +33,12 @@ const game = {
     const $stats = $(".stats-bar");
     const $dayTracker = $("<h2 id='days'>Day: " + this.days + "</h2>");
     const $foodTracker = $("<h2 id='food'>Food: " + this.food + "</h2>");
-    const $moneyTracker = $("<h2 id='money'>Money: " + this.money + "</h2>");
+    const $moneyTracker = $("<h2 id='money'>Money: $" + this.money + "</h2>");
     const $distanceTracker = $(
       "<h2 id='distance'>Distance Travelled: " + this.distance + "</h2>"
     );
     const $healthTracker = $(
-      "<h2 id='health'>Status: " + this.healthStatus + "</h2>"
+      "<h2 id='healthStatus'>Status: " + this.healthStatus + "</h2>"
     );
     const $hpTracker = $("<h2 id='hp'>Health: " + this.health + "</h2>");
     const $message = $(".message-box");
@@ -331,10 +332,12 @@ const game = {
     const health = this.health;
     const food = this.food;
     const distance = this.distance;
-    $("#health").text(`Health: ${this.health.toFixed(1)}`);
+    const money = this.money;
+    $("#hp").text(`Health: ${this.health.toFixed(1)}`);
     $("#food").text(`Food: ${this.food.toFixed(1)}`);
     $("#distance").text(`Distance Travelled: ${this.distance.toFixed(1)}`);
     $("#days").text(`Day: ${this.days}`);
+    $("#money").text(`Money: $${this.money}`);
   },
   town: function() {
     clearInterval(this.playerTimer);
@@ -347,9 +350,7 @@ const game = {
     );
     $(".town").append($townPrompt);
     $(".town").append($townImage);
-    $(".townButtons").append(
-      $("<button id='moveOn'>Move on without stopping</button>")
-    );
+    $(".townButtons").append($("<button id='moveOn'>Move on</button>"));
     $(".townButtons").append(
       $("<button id='goToStore'>Stop by the store to buy goods.</button>")
     );
@@ -364,9 +365,7 @@ const game = {
     if (choice === "moveOn") {
       $(".town-interactions").hide();
       this.resumeGame();
-      $(".message-box").text(
-        "You decided to go past the town without stopping by."
-      );
+      $(".message-box").text("You've moved passed the town.");
 
       setTimeout(fade, 4000);
 
@@ -386,7 +385,7 @@ const game = {
       this.money += 20;
       this.health += 40;
       this.saveStats();
-      setTimeout(townAgain, 3000);
+      setTimeout(townAgain, 2000);
 
       function townAgain() {
         $(".message-box").text("");
@@ -396,6 +395,7 @@ const game = {
     }
   },
   store: function() {
+    clearInterval(this.playTimer);
     let total = 0;
     let eggsBought = 0;
     let meatBought = 0;
@@ -406,31 +406,33 @@ const game = {
     const $storeDiv = $(".storeDiv");
     const $itemsDiv = $(".items");
     $(".storeOwner").append(
-      $("<img id='storeOwner' src='https://i.imgur.com/Th2wTxH.png'>")
+      $(
+        "<img class='storeStuff' id='storeOwner' src='https://i.imgur.com/Th2wTxH.png'>"
+      )
     );
     $storeDiv.prepend(
       $(
-        `<h3 id='storeprompt'>Welcome to my general store! You currently have $${this.money}.</br> What would you like to buy today? I have a limit of one wagon part and two for everything else.</h3>`
+        `<h3 class='storeStuff' id='storeprompt'>Welcome to my general store! You currently have $${this.money}.</br> What would you like to buy today? I have a limit of one wagon part and two for everything else.</h3>`
       )
     );
     const $eggs = $(
-      "<button id='buyEggs'>Eggs: $5 each dozen (+12 food)</button>"
+      "<button class='storeStuff' id='buyEggs'>Eggs: $5 each dozen (+12 food)</button>"
     );
 
     const $meat = $(
-      "<button id='buyMeat'>Meat: $8 for a steak (+20 food) </button>"
+      "<button class='storeStuff' id='buyMeat'>Meat: $8 for a steak (+20 food) </button>"
     );
 
     const $ointment = $(
-      "<button id='ointment'>Ointment: $6 for a bottle (+10 health) </button>"
+      "<button class='storeStuff' id='ointment'>Ointment: $6 for a bottle (+10 health) </button>"
     );
 
     const $ammunition = $(
-      "<button id='ammunition'>Ammunition: $15 per box (Enough for one hunt) </button>"
+      "<button class='storeStuff' id='ammunition'>Ammunition: $15 per box (Enough for one hunt) </button>"
     );
 
     const $wagonParts = $(
-      "<button id='wagonParts'>Wagon Parts: $35 (restores your wagon to full HP) </button>"
+      "<button class='storeStuff' id='wagonParts'>Wagon Parts: $35 (restores your wagon to full HP) </button>"
     );
 
     $itemsDiv.append($eggs);
@@ -440,64 +442,91 @@ const game = {
     $itemsDiv.append($wagonParts);
     $(".store-box").css("border", "2px solid white");
     $(".store-box").html(
-      `<h3 id='total'>Current total: ${total}</h3><h4 id='totalEggs'>Eggs bought: ${eggsBought}</h4><h4 id='totalMeat'>Meat bought: ${meatBought}</h4><h4 id='totalOintment'>Ointment bought: ${ointmentBought}</h4><h4 id='totalAmmunition'>Ammunition bought: ${ammunitionBought}</h4><h4 id='totalWagonParts'>Wagon parts bought: ${wagonPartsBought}</h4>`
+      `<h3 class='storeStuff' id='total'>Current total: ${total}</h3><h4 class='storeStuff' id='totalEggs'>Eggs bought: ${eggsBought}</h4><h4  class='storeStuff' id='totalMeat'>Meat bought: ${meatBought}</h4><h4 class='storeStuff' id='totalOintment'>Ointment bought: ${ointmentBought}</h4><h4 class='storeStuff' id='totalAmmunition'>Ammunition bought: ${ammunitionBought}</h4><h4 class='storeStuff'  id='totalWagonParts'>Wagon parts bought: ${wagonPartsBought}</h4>`
     );
 
-    $storeDiv.append("<button id='storeOk'>Ok</button>");
+    $storeDiv.append("<button class='storeStuff' id='storeOk'>Ok</button>");
 
     $("body").on("click", ".items", function(event) {
-      if (event.target.id === "buyEggs") {
-        eggsBought++;
-        total += 3;
-        $("#total").text(`Current total: ${total}`);
+      function updateTotals() {
         $("#totalEggs").text(`Eggs bought: ${eggsBought}`);
-      } else if (event.target.id === "buyMeat") {
-        meatBought++;
-        total += 8;
-        $("#total").text(`Current total: ${total}`);
         $("#totalMeat").text(`Meat bought: ${meatBought}`);
-      } else if (event.target.id === "ointment") {
-        ointmentBought++;
-        total += 6;
         $("#total").text(`Current total: ${total}`);
         $("#totalOintment").text(`Ointment bought: ${ointmentBought}`);
-      } else if (event.target.id === "ammunition") {
+        $("#totalAmmunition").text(`Ammunition bought: ${ammunitionBought}`);
+        $("#totalWagonParts").text(`Wagon parts bought: ${wagonPartsBought}`);
+      }
+
+      if (event.target.id === "buyEggs" && eggsBought < 2) {
+        eggsBought++;
+        total += 3;
+        game.total = total;
+        updateTotals();
+      } else if (event.target.id === "buyMeat" && meatBought < 2) {
+        meatBought++;
+        total += 8;
+        game.total = total;
+        updateTotals();
+      } else if (event.target.id === "ointment" && ointmentBought < 2) {
+        ointmentBought++;
+        total += 6;
+        game.total = total;
+        updateTotals();
+      } else if (event.target.id === "ammunition" && ammunitionBought < 2) {
         ammunitionBought++;
         total += 15;
-        $("#total").text(`Current total: ${total}`);
-        $("#totalAmmunition").text(`Ammunition bought: ${ammunitionBought}`);
+        game.total = total;
+        updateTotals();
       } else if (event.target.id === "wagonParts" && wagonPartsBought < 1) {
         wagonPartsBought++;
         total += 35;
-        $("#total").text(`Current total: ${total}`);
-        $("#totalWagonParts").text(`Wagon parts bought: ${wagonPartsBought}`);
+        game.total = total;
+        updateTotals();
       }
     });
 
-    $("body").on("click", "#storeOk", function(event) {
+    $("body").on("click", "#storeOk", function() {
+      game.checkMoney();
       if (game.money >= total) {
-        game.buyStuff(
-          eggsBought,
-          meatBought,
-          ointmentBought,
-          ammunitionBought,
-          wagonPartsBought
-        );
+        const eggsTot = eggsBought * 12;
+        const meatTot = meatBought * 20;
+        const ointmentTot = ointmentBought * 10;
+        game.food += eggsTot;
+        game.food += meatTot;
+        game.health += ointmentTot;
+        game.ammunition += ammunitionBought;
+        if (wagonPartsBought === 1) {
+          game.wagon.health = 100;
+        }
         game.money -= total;
         game.saveStats();
-        $(".storeDiv").hide();
-        $(".town-interactions").show();
-      } else {
-        console.log("not enough money");
       }
     });
   },
-  buyStuff: function(eggs, meat, ointment, ammunition, wagonParts) {
-    this.food += eggs * 12;
-    this.food += meat * 20;
-    this.health += ointment * 10;
-    this.ammunition += ammunition + 1;
-    this.wagon.health = 100;
+
+  checkMoney: function() {
+    if (this.money < this.total) {
+      $(".storeStuff").remove();
+      this.store();
+      $("#storeprompt").text(
+        "You don't seem to have enough for that purchase, buddy. Try again."
+      );
+      this.total = 0;
+    } else {
+      this.money -= this.total;
+      this.total = 0;
+      $("#storeprompt").text(
+        "Thanks for your purchase buddy! Hope you get to where ever you're trying to go safely."
+      );
+
+      setTimeout(resumeGame, 2000);
+
+      function resumeGame() {
+        $(".storeDiv").hide();
+        $(".town-interactions").show();
+        $("#goToStore").remove();
+      }
+    }
   }
 };
 
@@ -525,7 +554,6 @@ $("body").on("click", "#stop-button", function() {
 });
 
 $("body").on("click", "#yesStart", function() {
-  game.town();
   game.decideSpeed("walk");
 
   $("#yesStart").remove();
