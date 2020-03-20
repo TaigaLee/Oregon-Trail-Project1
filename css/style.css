@@ -102,3 +102,10 @@ button {
 .townButtons button {
   margin: 40px 50px;
 }
+
+.storeDiv button {
+  margin: 20px auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}

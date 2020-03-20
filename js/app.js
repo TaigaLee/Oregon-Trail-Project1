@@ -103,7 +103,6 @@ const game = {
   statsChanger: function(speed) {
     let distance = this.distance;
     let food = this.food;
-    let health = this.health;
     if (this.speed === "Running" && this.food > 0) {
       this.food = food - 0.8;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -111,8 +110,6 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-      this.health = health - 0.5;
-      $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (this.speed === "Walking" && this.food > 0) {
       this.food = food - 0.6;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -120,8 +117,6 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-      this.health = health - 0.3;
-      $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (this.speed === "Strolling" && this.food > 0) {
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -129,7 +124,6 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-      this.health = health - 0.2;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (this.speed === "Stopped" && this.food > 0 && this.health < 99) {
       this.food = food - 0.3;
@@ -316,7 +310,10 @@ const game = {
   },
   starveCondition: function() {
     if (this.food === 0) {
-      this.health -= 10;
+      $(".message-box").text(
+        "You're starving! Your health will drop now unless you can find some food."
+      );
+      this.health -= 5;
       this.saveStats();
     }
   },
@@ -382,9 +379,10 @@ const game = {
       this.resumeGame();
       $(".speed-buttons").hide();
       $(".message-box").text(
-        "You decided to spend some money and stay at an inn for the night. You feel much better!"
+        "You spent the day in town doing odd jobs and made some money! You decided to rest in town and feel much better in the morning."
       );
 
+      this.money += 20;
       this.health += 40;
       this.saveStats();
       setTimeout(townAgain, 3000);
@@ -397,7 +395,42 @@ const game = {
     }
   },
   store: function() {
-    const $storeDiv = $(".store");
+    const $itemDiv = $(".items");
+    $(".town-interactions").hide();
+    const $storeDiv = $(".storeDiv");
+    $storeDiv.prepend(
+      $("<img id='storeOwner' src='https://i.imgur.com/Th2wTxH.png'>")
+    );
+    $storeDiv.prepend(
+      $(
+        "<h1 id='storeprompt'>Welcome to my general store! What would you like to buy today?</h1>"
+      )
+    );
+    const $eggs = $(
+      "<button id='buyEggs'>Eggs: $3 each dozen (+8 food)</button>"
+    );
+
+    const $meat = $(
+      "<button id='buyMeat'>Meat: $8 for a steak (+15 food) </button>"
+    );
+
+    const $ointment = $(
+      "<button id='ointment'>Ointment: $6 for a bottle (+15 health) </button>"
+    );
+
+    const $ammunition = $(
+      "<button id='ammunition'>Ammunition: $15 per box (Enough for one hunt) </button>"
+    );
+
+    const $wagonParts = $(
+      "<button id='wagonParts'>Wagon Parts: $35 (restores your wagon to full HP) </button>"
+    );
+
+    $itemDiv.append($eggs);
+    $itemDiv.append($meat);
+    $itemDiv.append($ointment);
+    $itemDiv.append($ammunition);
+    $itemDiv.append($wagonParts);
   }
 };
 
@@ -450,7 +483,7 @@ $("body").on("click", "#yesStart", function() {
 
   setTimeout(function() {
     game.interact(1);
-  }, 30000);
+  }, 50000);
 
   setTimeout(function() {
     game.interact(2);
