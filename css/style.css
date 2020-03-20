@@ -59,7 +59,7 @@ button {
 
 .message-box button {
   height: 3em;
-  width: 5em;
+  width: 7em;
   margin-top: 40px;
 }
 
@@ -111,7 +111,7 @@ button {
 
 #storeOwner {
   align-self: flex-start;
-  height: 400px;
+  height: 350px;
 }
 .items {
   display: inline-block;
@@ -120,14 +120,28 @@ button {
 .items button {
   justify-content: center;
   margin: 30px 30px;
-  height: 100px;
-  width: 100px;
-  font-size: 15px;
+  height: 60px;
+  width: 80px;
+  font-size: 10px;
   vertical-align: top;
 }
 
 .store-box {
+  padding: 10px;
   align-self: center;
-  height: 100px;
-  width: 300px;
+  height: 230px;
+  width: 200px;
+}
+
+.store-box h3 {
+  font-size: 15px;
+}
+.store-box h4 {
+  font-size: 13px;
+}
+
+#storeOk {
+  height: 30px;
+  width: 80px;
+  margin: 20px auto;
 }
