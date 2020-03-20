@@ -357,6 +357,43 @@ const game = {
   },
   randomVoiceLines: function() {
     console.log("HI");
+  },
+  townInteractions(choice) {
+    if (choice === "moveOn") {
+      $(".town-interactions").hide();
+      this.resumeGame();
+      $(".message-box").text(
+        "You decided to go past the town without stopping by."
+      );
+
+      setTimeout(fade, 4000);
+
+      function fade() {
+        $(".message-box").text("");
+      }
+
+      this.timer();
+    } else if (choice === "rest") {
+      $(".town-interactions").hide();
+      this.resumeGame();
+      $(".speed-buttons").hide();
+      $(".message-box").text(
+        "You decided to spend some money and stay at an inn for the night. You feel much better!"
+      );
+
+      this.health += 40;
+      this.saveStats();
+      setTimeout(townAgain, 3000);
+
+      function townAgain() {
+        $(".message-box").text("");
+        $(".game-screen").hide();
+        $(".town-interactions").show();
+      }
+    }
+  },
+  store: function() {
+    const $storeDiv = $(".store");
   }
 };
 
@@ -456,4 +493,16 @@ $("body").on("click", ".riverOk", function() {
   setTimeout(function() {
     game.town();
   }, 90000);
+});
+
+$("body").on("click", "#moveOn", function() {
+  game.townInteractions("moveOn");
+});
+
+$("body").on("click", "#rest", function() {
+  game.townInteractions("rest");
+});
+
+$("body").on("click", "#goToStore", function() {
+  game.store();
 });
