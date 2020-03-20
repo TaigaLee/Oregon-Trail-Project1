@@ -12,7 +12,7 @@ class Pioneer {
 // game object
 
 const game = {
-  money: 100,
+  money: 50,
   food: 200,
   days: 0,
   distance: 0,
@@ -96,7 +96,6 @@ const game = {
       game.starveCondition();
     }, 1000);
     setInterval(function() {
-      console.log(game.currentTime);
       game.hunt();
     }, 80000);
   },
@@ -395,10 +394,11 @@ const game = {
     }
   },
   store: function() {
-    const $itemDiv = $(".items");
+    let total = 0;
     $(".town-interactions").hide();
     const $storeDiv = $(".storeDiv");
-    $storeDiv.prepend(
+    const $itemsDiv = $(".items");
+    $(".storeOwner").append(
       $("<img id='storeOwner' src='https://i.imgur.com/Th2wTxH.png'>")
     );
     $storeDiv.prepend(
@@ -426,11 +426,16 @@ const game = {
       "<button id='wagonParts'>Wagon Parts: $35 (restores your wagon to full HP) </button>"
     );
 
-    $itemDiv.append($eggs);
-    $itemDiv.append($meat);
-    $itemDiv.append($ointment);
-    $itemDiv.append($ammunition);
-    $itemDiv.append($wagonParts);
+    $itemsDiv.append($eggs);
+    $itemsDiv.append($meat);
+    $itemsDiv.append($ointment);
+    $itemsDiv.append($ammunition);
+    $itemsDiv.append($wagonParts);
+    $(".store-box").css("border", "2px solid white");
+    $(".store-box").html(`<h2>Current total: ${total}</h2>`);
+  },
+  storeInteractions: function() {
+    let money = this.money;
   }
 };
 
@@ -542,4 +547,18 @@ $("body").on("click", "#rest", function() {
 
 $("body").on("click", "#goToStore", function() {
   game.store();
+});
+
+$("body").on("click", ".items", function(event) {
+  if (event.target.id === "buyEggs") {
+    console.log("EGGS");
+  } else if (event.target.id === "buyMeat") {
+    console.log("MEAT");
+  } else if (event.target.id === "ointment") {
+    console.log("OINTMENT");
+  } else if (event.target.id === "ammunition") {
+    console.log("AMMUNITION");
+  } else if (event.target.id === "wagonParts") {
+    console.log("WAGON");
+  }
 });

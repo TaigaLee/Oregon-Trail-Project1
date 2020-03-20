@@ -103,9 +103,31 @@ button {
   margin: 40px 50px;
 }
 
-.storeDiv button {
-  margin: 20px auto;
+.storeDiv {
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  text-align: center;
+}
+
+#storeOwner {
+  align-self: flex-start;
+  height: 400px;
+}
+.items {
+  display: inline-block;
+  float: right;
+}
+.items button {
   justify-content: center;
+  margin: 30px 30px;
+  height: 100px;
+  width: 100px;
+  font-size: 15px;
+  vertical-align: top;
+}
+
+.store-box {
+  align-self: center;
+  height: 100px;
+  width: 300px;
 }
