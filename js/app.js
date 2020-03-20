@@ -60,6 +60,7 @@ const game = {
     $(".main-game-image").append(
       $("<img id='main-game-image' src=https://i.imgur.com/XLTUCpX.png>")
     );
+    $("#main-game-image").css("height", "350px");
     $("#next-button").on("click", function() {
       game.displayStats();
     });
@@ -67,7 +68,7 @@ const game = {
   displayStats: function() {
     const $message = $(".message-box");
     $message.text(
-      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You will have to reach Oregon before winter arrives, or else you are doomed. Are you ready to begin? You will start walking.`
+      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (100 miles) in 14 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
     );
     $message.append("<button id='yesStart'>Ok</button>");
   },
@@ -140,7 +141,7 @@ const game = {
   },
   statsDecrease: function() {
     let food = this.food;
-    if (this.currentTime % 60 === 0) {
+    if (this.currentTime % 45 === 0) {
       this.days++;
       $("#days").text(`Day: ${this.days}`);
     }
@@ -578,15 +579,7 @@ $("body").on("click", "#yesStart", function() {
 
   setTimeout(function() {
     game.interact(1);
-  }, 50000);
-
-  setTimeout(function() {
-    game.interact(2);
-  }, 2000000);
-
-  setTimeout(function() {
-    game.interact(2);
-  }, 5000000);
+  }, 30000);
 
   game.timer();
 });
@@ -604,6 +597,9 @@ $("body").on("click", ".boxOk", function() {
   $(".boxButtons").remove();
   game.resumeGame();
   game.timer();
+  setTimeout(function() {
+    game.interact(2);
+  }, 60000);
 });
 
 $("body").on("click", "#cross", function() {

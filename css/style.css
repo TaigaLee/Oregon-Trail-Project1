@@ -8,6 +8,9 @@ body {
   color: white;
 }
 
+#welcome-image {
+  height: 600px;
+}
 #start-button {
   display: block;
   width: 10em;
@@ -43,7 +46,7 @@ body {
 button {
   width: 10em;
   height: 5em;
-  border-radius: 15px;
+  border-radius: 25px;
 }
 
 #main-game-image {
