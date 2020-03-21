@@ -148,3 +148,43 @@ button {
   width: 80px;
   margin: 20px auto;
 }
+
+.hunt {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+.bunnyimg {
+  position: absolute;
+  top: 450px;
+  right: 0px;
+  left: 680px;
+  height: 60px;
+  width: 70px;
+  overflow: hidden;
+}
+
+#bunny {
+  -webkit-animation: walk-west 1s steps(4) infinite;
+  z-index: 1;
+}
+
+@-webkit-keyframes walk-west {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+#hunting-background {
+  position: relative;
+  z-index: -1;
+  height: 450px;
+}
+
+#okHunt {
+  margin-top: 30px;
+}

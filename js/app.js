@@ -13,7 +13,7 @@ class Pioneer {
 
 const game = {
   money: 50,
-  food: 200,
+  food: 100,
   days: 0,
   distance: 0,
   health: 100,
@@ -68,7 +68,7 @@ const game = {
   displayStats: function() {
     const $message = $(".message-box");
     $message.text(
-      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (100 miles) in 14 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
+      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (70) miles) in 10 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
     );
     $message.append("<button id='yesStart'>Ok</button>");
   },
@@ -101,7 +101,7 @@ const game = {
     }, 1000);
     setInterval(function() {
       game.hunt();
-    }, 80000);
+    }, 90000);
   },
   statsChanger: function(speed) {
     let distance = this.distance;
@@ -109,21 +109,21 @@ const game = {
     if (this.speed === "Running" && this.food > 0) {
       this.food = food - 0.8;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
-      this.distance = distance + 0.3;
+      this.distance = distance + 0.6;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
     } else if (this.speed === "Walking" && this.food > 0) {
       this.food = food - 0.6;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
-      this.distance = distance + 0.2;
+      this.distance = distance + 0.4;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
     } else if (this.speed === "Strolling" && this.food > 0) {
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
-      this.distance = distance + 0.1;
+      this.distance = distance + 0.2;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
@@ -141,7 +141,7 @@ const game = {
   },
   statsDecrease: function() {
     let food = this.food;
-    if (this.currentTime % 45 === 0) {
+    if (this.currentTime % 30 === 0) {
       this.days++;
       $("#days").text(`Day: ${this.days}`);
     }
@@ -160,7 +160,58 @@ const game = {
     }
   },
   hunt: function() {
-    console.log("placeholder");
+    $(".game-screen").hide();
+    $(".huntprompt").html(
+      "<h1 id='huntprompt'>I see some rabbits that I could hunt for meat! Quick, shoot them before it gets dark!</h1>"
+    );
+    $(".hunt-image").append(
+      $(
+        "<img id='hunting-background' src='https://i.pinimg.com/originals/b8/cb/bd/b8cbbda2ca1be6a11391559752937172.jpg'>"
+      )
+    );
+    $(".bunnyimg").append(
+      $("<img id='bunny' src='https://i.imgur.com/Vr27Ntq.png'>")
+    );
+
+    function bunnyMovement() {
+      setTimeout(moveBunny, 100);
+
+      setTimeout(moveBunny, 500);
+
+      setTimeout(moveBunny, 800);
+
+      setTimeout(moveBunny, 1200);
+
+      setTimeout(moveBunny, 1400);
+
+      setTimeout(moveBunny, 1600);
+
+      setTimeout(function() {
+        $(".bunnyimg").hide();
+      }, 1600);
+
+      function moveBunny() {
+        $(".bunnyimg").css("left", "-=100px");
+      }
+    }
+    bunnyMovement();
+
+    setTimeout(resetBunny, 3000);
+    setTimeout(bunnyMovement, 3100);
+    setTimeout(resetBunny, 6000);
+    setTimeout(bunnyMovement, 6100);
+
+    function resetBunny() {
+      $(".bunnyimg")
+        .show()
+        .css("left", "680px");
+    }
+
+    const $okHunt = "<button id='okHunt'>Done</button>";
+
+    setTimeout(function() {
+      $(".hunt").append($okHunt);
+    }, 7500);
   },
   interact: function(num) {
     if (num === 1) {
@@ -579,7 +630,7 @@ $("body").on("click", "#yesStart", function() {
 
   setTimeout(function() {
     game.interact(1);
-  }, 30000);
+  }, 25000);
 
   game.timer();
 });
@@ -633,4 +684,16 @@ $("body").on("click", "#rest", function() {
 
 $("body").on("click", "#goToStore", function() {
   game.store();
+});
+
+$("body").on("click", "#bunny", function(event) {
+  console.log(event.target);
+  $(".huntprompt").html("<h1 id='niceHunt'>Nice! You got one!</h1>");
+  game.food += 30;
+  game.saveStats();
+});
+
+$("body").on("click", "#okHunt", function() {
+  $(".hunt").hide();
+  game.resumeGame();
 });
