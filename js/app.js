@@ -410,8 +410,42 @@ const game = {
       $("<button id='rest'>Rest a day to restore health.</button>")
     );
   },
-  randomVoiceLines: function() {
-    console.log("HI");
+  randomVoiceLines: function(ran) {
+    const $messageBox = $(".message-box");
+
+    function fade() {
+      $(".message-box").text("");
+    }
+    if (ran === 0) {
+      $messageBox.text(
+        "I can't wait to get to Oregon! I'm gonna be rich and have so much land!"
+      );
+
+      setTimeout(fade, 4000);
+    } else if (ran === 1) {
+      $messageBox.text(
+        "What a nice day! I gotta get to Oregon before this winter storm hits."
+      );
+
+      setTimeout(fade, 4000);
+    } else if (ran === 2) {
+      $messageBox.text(
+        "I spent the entire year getting ready for this trip. That's why I had so much food and money ready!"
+      );
+
+      setTimeout(fade, 4000);
+    } else if (ran === 3) {
+      $messageBox.text(
+        "Man, I wonder what the first thing I'll eat in Oregon is..."
+      );
+
+      setTimeout(fade, 4000);
+    } else if (ran === 4) {
+      $messageBox.text(
+        "My oxen are the best! I couldn't have done without them this trip"
+      );
+      setTimeout(fade, 4000);
+    }
   },
   townInteractions(choice) {
     if (choice === "moveOn") {
@@ -553,6 +587,7 @@ const game = {
         game.money -= total;
         game.saveStats();
       }
+      setTimeout(game.randomVoiceLines(4), 5000);
     });
   },
 
@@ -607,7 +642,6 @@ $("body").on("click", "#stop-button", function() {
 
 $("body").on("click", "#yesStart", function() {
   game.decideSpeed("walk");
-
   $("#yesStart").remove();
 
   $(".message-box").text("Off you go!");
@@ -617,6 +651,7 @@ $("body").on("click", "#yesStart", function() {
   function fade() {
     $(".message-box").text("");
   }
+
   const $walkButtons = $(".speed-buttons");
 
   setTimeout(makeButtons, 2500);
@@ -651,6 +686,7 @@ $("body").on("click", ".boxOk", function() {
   setTimeout(function() {
     game.interact(2);
   }, 60000);
+  setTimeout(game.randomVoiceLines(0), 5000);
 });
 
 $("body").on("click", "#cross", function() {
@@ -672,6 +708,7 @@ $("body").on("click", ".riverOk", function() {
   setTimeout(function() {
     game.town();
   }, 90000);
+  setTimeout(game.randomVoiceLines(1), 5000);
 });
 
 $("body").on("click", "#moveOn", function() {
@@ -687,7 +724,6 @@ $("body").on("click", "#goToStore", function() {
 });
 
 $("body").on("click", "#bunny", function(event) {
-  console.log(event.target);
   $(".huntprompt").html("<h1 id='niceHunt'>Nice! You got one!</h1>");
   game.food += 30;
   game.saveStats();
@@ -696,4 +732,6 @@ $("body").on("click", "#bunny", function(event) {
 $("body").on("click", "#okHunt", function() {
   $(".hunt").hide();
   game.resumeGame();
+  game.timer();
+  setTimeout(game.randomVoiceLines(3), 5000);
 });
