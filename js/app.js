@@ -13,7 +13,7 @@ class Pioneer {
 
 const game = {
   money: 50,
-  food: 100,
+  food: 80,
   days: 0,
   distance: 0,
   health: 100,
@@ -99,9 +99,6 @@ const game = {
       game.statsDecrease();
       game.starveCondition();
     }, 1000);
-    setInterval(function() {
-      game.hunt();
-    }, 90000);
   },
   statsChanger: function(speed) {
     let distance = this.distance;
@@ -135,7 +132,7 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-      this.health = health + 1;
+      this.health += 1;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     }
   },
@@ -330,7 +327,11 @@ const game = {
         "https://cdn.vox-cdn.com/thumbor/oeNqqFIQsU_9Sfl1zhX4kSkJSGc=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378444/Screen_Shot_2015-02-02_at_2.51.49_PM.0.png"
       );
       $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
-      this.food -= 50;
+      if (this.food > 50) {
+        this.food -= 50;
+      } else {
+        this.food = 0;
+      }
       this.saveStats();
     } else if (answer === "wait") {
       $(".riverInfo").prepend(
@@ -356,18 +357,24 @@ const game = {
       );
       $("#riverImage").attr("src", "https://i.imgur.com/2LIivqw.png");
       this.days += 2;
-      this.food -= 40;
+      if (this.food > 30) {
+        this.food -= 30;
+      } else {
+        this.food = 0;
+      }
       this.health -= 10;
       this.saveStats();
       $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
     }
   },
   starveCondition: function() {
-    if (this.food === 0) {
+    if (this.food <= 1) {
       $(".message-box").text(
-        "You're starving! Your health will drop now unless you can find some food."
+        "I'm starving! My health will drop now unless you can find some food."
       );
-      this.health -= 5;
+      if (this.health > 5) {
+        this.health -= 5;
+      }
       this.saveStats();
     }
   },
@@ -448,6 +455,7 @@ const game = {
     }
   },
   townInteractions(choice) {
+    clearInterval(this.playerTimer);
     if (choice === "moveOn") {
       $(".town-interactions").hide();
       this.resumeGame();
@@ -481,7 +489,7 @@ const game = {
     }
   },
   store: function() {
-    clearInterval(this.playTimer);
+    clearInterval(this.playerTimer);
     let total = 0;
     let eggsBought = 0;
     let meatBought = 0;
@@ -685,7 +693,7 @@ $("body").on("click", ".boxOk", function() {
   game.timer();
   setTimeout(function() {
     game.interact(2);
-  }, 60000);
+  }, 40000);
   setTimeout(game.randomVoiceLines(0), 5000);
 });
 
@@ -703,11 +711,15 @@ $("body").on("click", "#longRoute", function() {
 
 $("body").on("click", ".riverOk", function() {
   $(".riverInfo").remove();
+  $(".riverOk").remove();
   game.resumeGame();
   game.timer();
   setTimeout(function() {
     game.town();
-  }, 90000);
+  }, 100000);
+  setTimeout(function() {
+    game.hunt();
+  }, 20000);
   setTimeout(game.randomVoiceLines(1), 5000);
 });
 
@@ -732,6 +744,9 @@ $("body").on("click", "#bunny", function(event) {
 $("body").on("click", "#okHunt", function() {
   $(".hunt").hide();
   game.resumeGame();
-  game.timer();
   setTimeout(game.randomVoiceLines(3), 5000);
+});
+
+$("body").on("click", function(event) {
+  console.log(event.target);
 });
