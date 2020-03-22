@@ -67,7 +67,7 @@ loseMusic.loop = true;
 // game object
 
 const game = {
-  money: 30,
+  money: 35,
   food: 100,
   days: 0,
   distance: 0,
@@ -127,7 +127,7 @@ const game = {
   displayStats: function() {
     const $message = $(".message-box");
     $message.text(
-      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (70) miles) in 10 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
+      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (75) miles) in 10 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
     );
     $message.append("<button id='yesStart'>Ok</button>");
   },
@@ -163,15 +163,23 @@ const game = {
   statsChanger: function(speed) {
     let distance = this.distance;
     let food = this.food;
-    if (this.speed === "Running" && this.food > 0) {
-      this.wagon.health -= 0.5;
+    if (
+      this.speed === "Running" &&
+      this.food > 0.8 &&
+      this.wagon.heatlh > 0.4
+    ) {
+      this.wagon.health -= 0.4;
       this.food = food - 0.8;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.4;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-    } else if (this.speed === "Walking" && this.food > 0) {
+    } else if (
+      this.speed === "Walking" &&
+      this.food > 0.5 &&
+      this.wagon.heatlh > 0.3
+    ) {
       this.wagon.health -= 0.3;
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -179,7 +187,11 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-    } else if (this.speed === "Strolling" && this.food > 0) {
+    } else if (
+      this.speed === "Strolling" &&
+      this.food > 0 &&
+      this.wagon.health > 0.2
+    ) {
       this.wagon.health -= 0.2;
       this.food = food - 0.4;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -189,11 +201,12 @@ const game = {
       );
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (
-      this.speed === "Move very slowly" &&
-      this.food > 0 &&
-      this.health < 99
+      this.speed === "Moving very slowly" &&
+      this.food > 0.3 &&
+      this.health < 99 &&
+      this.wagon.health > 0.1
     ) {
-      this.wagon.health -= 0.2;
+      this.wagon.health -= 0.1;
       this.food = food - 0.3;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance;
@@ -234,7 +247,7 @@ const game = {
     $(".game-screen").hide();
     $(".hunt").prepend(
       $(
-        "<h1 id='huntprompt'>I see some rabbits that I could hunt for meat! Quick, shoot them before it gets dark!</h1>"
+        "<h1 id='huntprompt'>I see some rabbits that I could hunt for meat! Quick, shoot them (click them) before it gets dark!</h1>"
       )
     );
     $(".hunt-image").append(
@@ -412,7 +425,7 @@ const game = {
       );
       $("#riverImage").attr(
         "src",
-        "https://cdn.vox-cdn.com/thumbor/oeNqqFIQsU_9Sfl1zhX4kSkJSGc=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378444/Screen_Shot_2015-02-02_at_2.51.49_PM.0.png"
+        "https://thumbs.gfycat.com/WindySlightFlea-size_restricted.gif"
       );
       $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
       if (this.food > 30) {
@@ -428,16 +441,13 @@ const game = {
           "<h1>You decided to wait a day. The river calms down and you cross without any damage, but the hot sun causes you to have heat exhaustion.</h1>"
         )
       );
-      $("#riverImage").attr(
-        "src",
-        "https://i.ytimg.com/vi/MrgAD6V_V0A/hqdefault.jpg"
-      );
+      $("#riverImage").attr("src", "https://i.gifer.com/JzDJ.gif");
       $("#riverImage").attr("id", "crossingRiver");
       this.days++;
-      if (this.food > 20) {
-        this.food -= 20;
+      if (this.food > 18) {
+        this.food -= 18;
         this.saveStats();
-      } else if (this.food < 20) {
+      } else if (this.food < 18) {
         this.food = 0;
         this.saveStats();
       }
@@ -508,10 +518,12 @@ const game = {
     $(".town").append($townImage);
     $(".townButtons").append($("<button id='moveOn'>Move on</button>"));
     $(".townButtons").append(
-      $("<button id='goToStore'>Stop by the store to buy goods.</button>")
+      $(
+        "<button id='goToStore'>Stop by the store to buy goods. (You can only go once)</button>"
+      )
     );
     $(".townButtons").append(
-      $("<button id='rest'>Rest a day to restore health.</button>")
+      $("<button id='rest'>Rest a day to restore health + get money.</button>")
     );
   },
   randomVoiceLines: function(ran) {
@@ -670,22 +682,21 @@ const game = {
     $("body").on("click", "#storeOk", function() {
       storeMusic.pause();
       townMusic.play();
-      game.checkMoney();
       if (game.money >= total) {
         const eggsTot = eggsBought * 12;
         const meatTot = meatBought * 20;
         const ointmentTot = ointmentBought * 10;
+        const wagonTot = wagonPartsBought;
         game.food += eggsTot;
         game.food += meatTot;
         game.health += ointmentTot;
-        if (wagonPartsBought === 1) {
+        if (wagonTot === 1) {
           game.wagon.health = 100;
         }
-        game.money -= total;
         game.saveStats();
       }
+      game.checkMoney();
       setTimeout(game.randomVoiceLines(4), 5000);
-      game.timer();
     });
   },
 
@@ -714,11 +725,16 @@ const game = {
     }
   },
   winOrLose: function() {
-    if (this.distance >= 70 && this.health > 0 && this.days <= 10) {
+    if (
+      this.distance >= 75 &&
+      this.health > 0 &&
+      this.days <= 10 &&
+      this.wagon.health > 1
+    ) {
       oxMusic.pause();
       winMusic.play();
       clearInterval(this.playerTimer);
-      $(".game").hide();
+      $(".game").remove();
       const $winDiv = $(".win");
       $winDiv.append($("<h1>Congrats! You've made it to Oregon!</h1>"));
       $winDiv.append(
@@ -726,7 +742,7 @@ const game = {
           "<img src='https://cdn.vox-cdn.com/thumbor/5UOEwi1yQauMOb0fD5bqGqmLcbA=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378408/hangingoutwithoxen.0.png'>"
         )
       );
-    } else if (this.health <= 0 || this.days > 10) {
+    } else if (this.health <= 0 || this.days > 10 || this.wagon.health <= 0) {
       oxMusic.pause();
       loseMusic.play();
       clearInterval(this.playerTimer);
@@ -866,16 +882,14 @@ $("body").on("click", "#goToStore", function() {
 
 $("body").on("click", "#bunny", function(event) {
   $("#huntprompt").html("<h3 id='niceHunt'>Nice! You got one!</h3>");
-  game.food += 30;
+  game.food += 25;
   game.saveStats();
 });
 
 $("body").on("click", "#okHunt", function() {
   huntMusic.pause();
   oxMusic.play();
-  $(".hunt").hide();
+  $(".hunt").remove();
   game.resumeGame();
   setTimeout(game.randomVoiceLines(3), 5000);
 });
-
-mainMusic.play();
