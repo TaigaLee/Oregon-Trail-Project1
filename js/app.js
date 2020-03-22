@@ -5,10 +5,65 @@ class Pioneer {
   }
 }
 
-// class AnimalToHunt {
-//   this.value
-// }
+// music
 
+const mainMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/grhaiqgy/001%20Title%20Theme.mp3"
+);
+mainMusic.loop = true;
+
+const oxMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/hulgofoq/006%20Trail%201%20Good.mp3"
+);
+oxMusic.loop = true;
+
+const boxMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/khhmlora/005%20Kanesville%2C%20Council%20Bluffs.mp3"
+);
+boxMusic.loop = true;
+
+const beesMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/wnynpdgq/021%20Trail%202%20Poor.mp3"
+);
+beesMusic.loop = true;
+
+const goodBoxMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/ujapimen/032%20Trail%203%20Good.mp3"
+);
+
+goodBoxMusic.loop = true;
+
+const riverMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/eitlrgms/022%20Down%20In%20The%20Valley.mp3"
+);
+
+riverMusic.loop = true;
+
+const townMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/ybnhyccg/009%20Go%20Tell%20Aunt%20Rhody%20%28Town%29.mp3"
+);
+
+townMusic.loop = true;
+
+const storeMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/ferblmzs/013%20Jimmy%20Crack%20Corn%20%28Fort%29.mp3"
+);
+storeMusic.loop = true;
+
+const huntMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/iasxwiwx/055%20Buffalo%20Gals%20%28Town%29.mp3"
+);
+huntMusic.loop = true;
+
+const winMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/ilsubhrx/064%20You%27ve%20Reached%20Your%20Destination%21.mp3"
+);
+winMusic.loop = true;
+
+const loseMusic = new Audio(
+  "https://vgmdownloads.com/soundtracks/oregon-trail-2-ost/pegpgqml/048%20Trail%204%20Poor.mp3"
+);
+loseMusic.loop = true;
 // game object
 
 const game = {
@@ -37,7 +92,7 @@ const game = {
       "<h2 id='distance'>Distance Travelled: " + this.distance + "</h2>"
     );
     const $healthTracker = $(
-      "<h2 id='healthStatus'>Status: " + this.healthStatus + "</h2>"
+      "<h2 id='healthStatus'>Wagon Status: " + this.healthStatus + "</h2>"
     );
     const $hpTracker = $("<h2 id='hp'>Health: " + this.health + "</h2>");
     const $message = $(".message-box");
@@ -103,13 +158,13 @@ const game = {
       game.statsDecrease();
       game.starveCondition();
       game.winOrLose();
-      console.log(game.currentTime);
     }, 1000);
   },
   statsChanger: function(speed) {
     let distance = this.distance;
     let food = this.food;
     if (this.speed === "Running" && this.food > 0) {
+      this.wagon.health -= 0.5;
       this.food = food - 0.8;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.4;
@@ -117,6 +172,7 @@ const game = {
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
     } else if (this.speed === "Walking" && this.food > 0) {
+      this.wagon.health -= 0.3;
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.2;
@@ -124,6 +180,7 @@ const game = {
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
     } else if (this.speed === "Strolling" && this.food > 0) {
+      this.wagon.health -= 0.2;
       this.food = food - 0.4;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.1;
@@ -136,6 +193,7 @@ const game = {
       this.food > 0 &&
       this.health < 99
     ) {
+      this.wagon.health -= 0.2;
       this.food = food - 0.3;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance;
@@ -151,26 +209,28 @@ const game = {
     }
   },
   statsDecrease: function() {
-    let food = this.food;
     if (this.currentTime % 30 === 0) {
       this.days++;
       $("#days").text(`Day: ${this.days}`);
     }
-    if (this.health <= 80 && this.health >= 40) {
+    if (this.wagon.health <= 80 && this.wagon.health >= 40) {
       this.healthStatus = "Decent";
-      $("#health").text(`Health: ${this.healthStatus}`);
-    } else if (this.health < 40 && this.health >= 20) {
+      $("#healthStatus").text(`Wagon Health: ${this.healthStatus}`);
+    } else if (this.wagon.health < 40 && this.wagon.health >= 20) {
       this.healthStatus = "Bad";
-      $("#health").text(`Health: ${this.healthStatus}`);
-    } else if (this.health < 20 && this.health > 5) {
+      $("#healthStatus").text(`Wagon Health: ${this.healthStatus}`);
+    } else if (this.wagon.health < 20 && this.wagon.health > 5) {
       this.healthStatus = "About to die";
-      $("#health").text(`Health: ${this.healthStatus}`);
-    } else if (this.health === 0) {
-      this.healthStatus = "Dead";
-      $("#health").text(`Health: ${this.healthStatus}`);
+      $("#healthStatus").text(`Wagon Health: ${this.healthStatus}`);
+    } else if (this.wagon.health === 0) {
+      this.healthStatus = "No longer useable";
+      $("#healthStatus").text(`Wagon Health: ${this.healthStatus}`);
     }
   },
   hunt: function() {
+    oxMusic.pause();
+    huntMusic.play();
+    $(".store-div").hide();
     $(".game-screen").hide();
     $(".hunt").prepend(
       $(
@@ -232,6 +292,8 @@ const game = {
   },
   interact: function(num) {
     if (num === 1) {
+      oxMusic.pause();
+      boxMusic.play();
       const $interactionDiv = $(".boxInfo");
       $(".game-screen").hide();
       const $interaction1 = $(
@@ -251,6 +313,8 @@ const game = {
       $(".boxButtons").append($yesButton);
       $(".boxButtons").append($noButton);
     } else if (num === 2) {
+      oxMusic.pause();
+      riverMusic.play();
       const $riverDiv = $(".riverInfo");
       const $riverButtons = $(".riverButtons");
       $(".game-screen").hide();
@@ -289,6 +353,8 @@ const game = {
     }
     if (option === "box") {
       if (random === 0) {
+        boxMusic.pause();
+        beesMusic.play();
         removeStuff();
         const $badStatus = $(
           "<h2>The crate contained a hoard of wasps. You managed to escape, but at the expense of getting stung quite a few times.</h2>"
@@ -296,13 +362,15 @@ const game = {
         $(".boxInfo").append($badStatus);
         $(".boxInfo").append(
           $(
-            "<img id='wasp' src='https://i.pinimg.com/originals/5c/31/e5/5c31e5a18cd365132db3c2dfa6164df7.jpg'>"
+            "<img id='wasp' src='https://bestanimations.com/Animals/Insects/Bees/bee-animated-gif-61.gif'>"
           )
         );
         $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
         this.health -= 30;
         this.saveStats();
       } else {
+        boxMusic.pause();
+        goodBoxMusic.play();
         removeStuff();
         const $goodStatus = $(
           "<h2>The crate contained a bunch of food! It must've dropped off of someone else's wagon, but it's yours now!</h2>"
@@ -410,11 +478,6 @@ const game = {
       }
     }
   },
-  deathConditions: function() {
-    if (this.health <= 0) {
-      console.log("YOU'RE DEAD");
-    }
-  },
   resumeGame: function() {
     $(".game-screen").show();
   },
@@ -431,6 +494,8 @@ const game = {
     $("#money").text(`Money: $${this.money}`);
   },
   town: function() {
+    oxMusic.pause();
+    townMusic.play();
     clearInterval(this.playerTimer);
     $(".game-screen").hide();
     const $townPrompt = $(
@@ -521,6 +586,9 @@ const game = {
     }
   },
   store: function() {
+    townMusic.pause();
+    storeMusic.play();
+    $(".storeDiv").show();
     clearInterval(this.playerTimer);
     let total = 0;
     let eggsBought = 0;
@@ -600,6 +668,8 @@ const game = {
     });
 
     $("body").on("click", "#storeOk", function() {
+      storeMusic.pause();
+      townMusic.play();
       game.checkMoney();
       if (game.money >= total) {
         const eggsTot = eggsBought * 12;
@@ -645,6 +715,9 @@ const game = {
   },
   winOrLose: function() {
     if (this.distance >= 70 && this.health > 0 && this.days <= 10) {
+      oxMusic.pause();
+      winMusic.play();
+      clearInterval(this.playerTimer);
       $(".game").hide();
       const $winDiv = $(".win");
       $winDiv.append($("<h1>Congrats! You've made it to Oregon!</h1>"));
@@ -654,6 +727,9 @@ const game = {
         )
       );
     } else if (this.health <= 0 || this.days > 10) {
+      oxMusic.pause();
+      loseMusic.play();
+      clearInterval(this.playerTimer);
       $(".game").hide();
       const $loseDiv = $(".lose");
       $loseDiv.append($("<h1>You didn't make it to Oregon. Try again.</h1>"));
@@ -671,6 +747,7 @@ const game = {
 $("#start-button").on("click", function() {
   const pName = $("#name-entry-input").val();
   game.startGame(pName);
+  mainMusic.play();
 });
 
 $("body").on("click", "#run-button", function() {
@@ -690,6 +767,8 @@ $("body").on("click", "#stop-button", function() {
 });
 
 $("body").on("click", "#yesStart", function() {
+  mainMusic.pause();
+  oxMusic.play();
   game.timer();
   game.decideSpeed("walk");
   $("#yesStart").remove();
@@ -729,6 +808,10 @@ $("body").on("click", "#noBox", function() {
 });
 
 $("body").on("click", ".boxOk", function() {
+  boxMusic.pause();
+  beesMusic.pause();
+  goodBoxMusic.pause();
+  oxMusic.play();
   $(".boxInfo").remove();
   $(".boxButtons").remove();
   game.resumeGame();
@@ -752,6 +835,8 @@ $("body").on("click", "#longRoute", function() {
 });
 
 $("body").on("click", ".riverOk", function() {
+  riverMusic.pause();
+  oxMusic.play();
   $(".riverInfo").remove();
   $(".riverOk").remove();
   game.resumeGame();
@@ -766,6 +851,8 @@ $("body").on("click", ".riverOk", function() {
 });
 
 $("body").on("click", "#moveOn", function() {
+  townMusic.pause();
+  oxMusic.play();
   game.townInteractions("moveOn");
 });
 
@@ -784,7 +871,11 @@ $("body").on("click", "#bunny", function(event) {
 });
 
 $("body").on("click", "#okHunt", function() {
+  huntMusic.pause();
+  oxMusic.play();
   $(".hunt").hide();
   game.resumeGame();
   setTimeout(game.randomVoiceLines(3), 5000);
 });
+
+mainMusic.play();
