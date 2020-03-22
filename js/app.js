@@ -12,7 +12,7 @@ class Pioneer {
 // game object
 
 const game = {
-  money: 50,
+  money: 30,
   food: 80,
   days: 0,
   distance: 0,
@@ -68,7 +68,7 @@ const game = {
   displayStats: function() {
     const $message = $(".message-box");
     $message.text(
-      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (70) miles) in 10 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
+      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (100) miles) in 10 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
     );
     $message.append("<button id='yesStart'>Ok</button>");
   },
@@ -106,21 +106,21 @@ const game = {
     if (this.speed === "Running" && this.food > 0) {
       this.food = food - 0.8;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
-      this.distance = distance + 0.6;
-      $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(1)} miles`
-      );
-    } else if (this.speed === "Walking" && this.food > 0) {
-      this.food = food - 0.6;
-      $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.4;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-    } else if (this.speed === "Strolling" && this.food > 0) {
+    } else if (this.speed === "Walking" && this.food > 0) {
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.2;
+      $("#distance").text(
+        `Distance Travelled: ${this.distance.toFixed(1)} miles`
+      );
+    } else if (this.speed === "Strolling" && this.food > 0) {
+      this.food = food - 0.4;
+      $("#food").text(`Food: ${this.food.toFixed(1)}`);
+      this.distance = distance + 0.1;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
@@ -132,7 +132,7 @@ const game = {
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
-      this.health += 1;
+      this.health += 2;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     }
   },
@@ -193,10 +193,14 @@ const game = {
     }
     bunnyMovement();
 
-    setTimeout(resetBunny, 3000);
-    setTimeout(bunnyMovement, 3100);
     setTimeout(resetBunny, 6000);
     setTimeout(bunnyMovement, 6100);
+    setTimeout(resetBunny, 9000);
+    setTimeout(bunnyMovement, 9100);
+    setTimeout(resetBunny, 12000);
+    setTimeout(bunnyMovement, 12100);
+    setTimeout(resetBunny, 15000);
+    setTimeout(bunnyMovement, 15100);
 
     function resetBunny() {
       $(".bunnyimg")
@@ -357,8 +361,8 @@ const game = {
       );
       $("#riverImage").attr("src", "https://i.imgur.com/2LIivqw.png");
       this.days += 2;
-      if (this.food > 30) {
-        this.food -= 30;
+      if (this.food > 10) {
+        this.food -= 15;
       } else {
         this.food = 0;
       }
@@ -373,9 +377,14 @@ const game = {
         "I'm starving! My health will drop now unless you can find some food."
       );
       if (this.health > 5) {
-        this.health -= 5;
+        this.health -= 2;
+        this.saveStats();
+      } else if (this.food < 1 && this.health === 0) {
+        this.health = 0;
+        this.saveStats();
+      } else {
+        this.saveStats();
       }
-      this.saveStats();
     }
   },
   deathConditions: function() {
@@ -437,7 +446,7 @@ const game = {
       setTimeout(fade, 4000);
     } else if (ran === 2) {
       $messageBox.text(
-        "I spent the entire year getting ready for this trip. That's why I had so much food and money ready!"
+        "This trip was last minute. That's why I don't have much saved up..."
       );
 
       setTimeout(fade, 4000);
