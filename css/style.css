@@ -44,8 +44,7 @@ body {
 }
 
 button {
-  font-family: "Anton", sans-serif;
-  font-size: 12px;
+  font-family: "Concert One", cursive;
   width: 10em;
   height: 5em;
   border-radius: 25px;
@@ -104,8 +103,15 @@ button {
   height: 40%;
 }
 
+.townButtons {
+  display: flex;
+  flex-direction: row;
+  vertical-align: top;
+  justify-content: center;
+}
+
 .townButtons button {
-  margin: 40px 50px;
+  margin: 40px 30px;
 }
 
 .storeDiv {

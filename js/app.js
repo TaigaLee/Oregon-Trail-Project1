@@ -98,7 +98,7 @@ const game = {
     const $message = $(".message-box");
     $message.css("width", "500px");
     $message.css("padding", "20px");
-    $message.css("height", "200px");
+    $message.css("height", "150px");
     $message.css("border", "2px solid white");
     $message.css("margin", "30px auto");
     $message.text(
@@ -506,7 +506,7 @@ const game = {
     $(".townButtons").append($("<button id='moveOn'>Move on</button>"));
     $(".townButtons").append(
       $(
-        "<button id='goToStore'>Stop by the store to buy goods. (You can only go once)</button>"
+        "<button id='goToStore'>Stop by the store to buy goods. (Can only go once)</button>"
       )
     );
     $(".townButtons").append(
@@ -878,5 +878,5 @@ $("body").on("click", "#okHunt", function() {
   oxMusic.play();
   $(".hunt").remove();
   game.resumeGame();
-  setTimeout(game.randomVoiceLines(3), 5000);
+  setTimeout(game.randomVoiceLines(3), 6000);
 });
