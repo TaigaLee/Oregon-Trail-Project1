@@ -1,7 +1,7 @@
-**Game idea:**
+#Game idea:
 Create a mini version of the classic game Oregon Trail where the player embarks on a trip to Oregon. Along the way the player is met with decisions that will affect their progress and are tasked with the responsibilities of making sure they don’t run out of food and stay healthy.
 
-**User story:**
+#User story:
 
 Player starts at max stats (80 food, 100 hp, 100 wagon HP, and \$35) and at the beginning of the map. They have the option of whether to run, walk normally, or walk slowly. Dependent on each choice they will lose stamina more or less quickly. They will auto walk without requiring key input.
 
@@ -17,20 +17,20 @@ User can die of illness, starvation, or if the game hits winter.
 
 The user will win the game after traveling 75 miles before winter comes in 10 days.
 
-**Approaches taken:**
+#Approaches taken:
 
 The entire game is written in jQuery, vanilla JS, HTML, and CSS. I did not use a JS library to animate, instead I used jQuery's animation features.
 
-**Problems:**
+#Problems:
 
 I need to figure out how to have the pictures stack relatively without me hard coding the pxs as that will change depending on how big the user's screen is.
 
 Code is very long, need to make more DRY and less redundant.
 
-**Forthcoming features:**
+#Forthcoming features:
 Make the game longer, add more interactions, make the store have the images of what people are buying.
 
-**Wireframe:**
+#Wireframe:
 
 General layout of the game -
 ![first wireframe board](https://i.imgur.com/D8Wpuyk.jpg)
