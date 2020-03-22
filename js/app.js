@@ -13,7 +13,7 @@ class Pioneer {
 
 const game = {
   money: 30,
-  food: 80,
+  food: 100,
   days: 0,
   distance: 0,
   health: 100,
@@ -67,7 +67,7 @@ const game = {
   displayStats: function() {
     const $message = $(".message-box");
     $message.text(
-      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (100) miles) in 10 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
+      `You currently have $${this.money}, your health points are at ${this.health}, and your wagon has ${this.wagon.health} health points. You had a late start and need to reach Oregon (70) miles) in 10 days, or else a huge winter storm approaches and you are doomed. Are you ready to begin? You will start walking.`
     );
     $message.append("<button id='yesStart'>Ok</button>");
   },
@@ -158,8 +158,10 @@ const game = {
   },
   hunt: function() {
     $(".game-screen").hide();
-    $(".huntprompt").html(
-      "<h1 id='huntprompt'>I see some rabbits that I could hunt for meat! Quick, shoot them before it gets dark!</h1>"
+    $(".hunt").prepend(
+      $(
+        "<h1 id='huntprompt'>I see some rabbits that I could hunt for meat! Quick, shoot them before it gets dark!</h1>"
+      )
     );
     $(".hunt-image").append(
       $(
@@ -171,7 +173,7 @@ const game = {
     );
 
     function bunnyMovement() {
-      setTimeout(moveBunny, 100);
+      setTimeout(moveBunny, 300);
 
       setTimeout(moveBunny, 500);
 
@@ -181,11 +183,11 @@ const game = {
 
       setTimeout(moveBunny, 1400);
 
-      setTimeout(moveBunny, 1600);
+      // setTimeout(moveBunny, 1600);
 
       setTimeout(function() {
         $(".bunnyimg").hide();
-      }, 1600);
+      }, 1650);
 
       function moveBunny() {
         $(".bunnyimg").css("left", "-=100px");
@@ -205,7 +207,7 @@ const game = {
     function resetBunny() {
       $(".bunnyimg")
         .show()
-        .css("left", "680px");
+        .css("left", "1100px");
     }
 
     const $okHunt = "<button id='okHunt'>Done</button>";
@@ -284,7 +286,7 @@ const game = {
           )
         );
         $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
-        this.health -= 40;
+        this.health -= 30;
         this.saveStats();
       } else {
         removeStuff();
@@ -331,12 +333,13 @@ const game = {
         "https://cdn.vox-cdn.com/thumbor/oeNqqFIQsU_9Sfl1zhX4kSkJSGc=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378444/Screen_Shot_2015-02-02_at_2.51.49_PM.0.png"
       );
       $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
-      if (this.food > 50) {
-        this.food -= 50;
+      if (this.food > 30) {
+        this.food -= 30;
+        this.saveStats();
       } else {
         this.food = 0;
+        this.saveStats();
       }
-      this.saveStats();
     } else if (answer === "wait") {
       $(".riverInfo").prepend(
         $(
@@ -349,7 +352,13 @@ const game = {
       );
       $("#riverImage").attr("id", "crossingRiver");
       this.days++;
-      this.food -= 20;
+      if (this.food > 20) {
+        this.food -= 20;
+        this.saveStats();
+      } else if (this.food < 20) {
+        this.food = 0;
+        this.saveStats();
+      }
       this.health -= 35;
       this.saveStats();
       $(".riverButtons").append($("<button class='riverOk'>Ok</button>"));
@@ -592,6 +601,7 @@ const game = {
         game.saveStats();
       }
       setTimeout(game.randomVoiceLines(4), 5000);
+      game.timer();
     });
   },
 
@@ -620,6 +630,7 @@ const game = {
     }
   },
   winOrLose: function() {
+    clearInterval(this.playerTimer);
     if (this.distance >= 70 && this.health > 0 && this.days <= 10) {
       $(".game").hide();
       const $winDiv = $(".win");
@@ -753,7 +764,7 @@ $("body").on("click", "#goToStore", function() {
 });
 
 $("body").on("click", "#bunny", function(event) {
-  $(".huntprompt").html("<h1 id='niceHunt'>Nice! You got one!</h1>");
+  $("#huntprompt").html("<h3 id='niceHunt'>Nice! You got one!</h3>");
   game.food += 30;
   game.saveStats();
 });
