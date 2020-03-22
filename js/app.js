@@ -89,7 +89,7 @@ const game = {
     const $foodTracker = $("<h2 id='food'>Food: " + this.food + "</h2>");
     const $moneyTracker = $("<h2 id='money'>Money: $" + this.money + "</h2>");
     const $distanceTracker = $(
-      "<h2 id='distance'>Distance Travelled: " + this.distance + "</h2>"
+      "<h2 id='distance'>Distance Traveled: " + this.distance + "</h2>"
     );
     const $healthTracker = $(
       "<h2 id='healthStatus'>Wagon Status: " + this.healthStatus + "</h2>"
@@ -173,7 +173,7 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.4;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(1)} miles`
+        `Distance Traveled: ${this.distance.toFixed(1)} miles`
       );
     } else if (
       this.speed === "Walking" &&
@@ -185,7 +185,7 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.2;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(1)} miles`
+        `Distance Traveled: ${this.distance.toFixed(1)} miles`
       );
     } else if (
       this.speed === "Strolling" &&
@@ -197,7 +197,7 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance + 0.1;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(1)} miles`
+        `Distance Traveled: ${this.distance.toFixed(1)} miles`
       );
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (
@@ -211,11 +211,11 @@ const game = {
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(1)} miles`
+        `Distance Traveled: ${this.distance.toFixed(1)} miles`
       );
       this.distance = distance + 0.2;
       $("#distance").text(
-        `Distance Travelled: ${this.distance.toFixed(1)} miles`
+        `Distance Traveled: ${this.distance.toFixed(1)} miles`
       );
       this.health += 2;
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
@@ -499,7 +499,7 @@ const game = {
     const money = this.money;
     $("#hp").text(`Health: ${this.health.toFixed(1)}`);
     $("#food").text(`Food: ${this.food.toFixed(1)}`);
-    $("#distance").text(`Distance Travelled: ${this.distance.toFixed(1)}`);
+    $("#distance").text(`Distance Traveled: ${this.distance.toFixed(1)}`);
     $("#days").text(`Day: ${this.days}`);
     $("#money").text(`Money: $${this.money}`);
   },
