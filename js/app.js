@@ -57,7 +57,12 @@ const game = {
     $stats.append($healthTracker);
     $stats.append($moneyTracker);
     $(".main-game-image").append(
-      $("<img id='main-game-image' src=https://i.imgur.com/XLTUCpX.png>")
+      $(
+        "<img id='main-game-image' src='https://assets.website-files.com/5661de094faab4b202ad12f2/5852de4b99affdc361f41834_bg%20anim%2036.gif'>"
+      )
+    );
+    $(".cowswalking").append(
+      $("<img id='cows' src='https://i.imgur.com/nnKCqjz.png'>")
     );
     $("#main-game-image").css("height", "350px");
     $("#next-button").on("click", function() {
@@ -86,8 +91,8 @@ const game = {
     } else if (speed === "stroll") {
       this.speed = "Strolling";
       $speedDisplay.text(`Current speed: ${this.speed}`);
-    } else if (speed === "stop") {
-      this.speed = "Stopped";
+    } else if (speed === "Move very slowly") {
+      this.speed = "Moving very slowly";
       $speedDisplay.text(`Current speed: ${this.speed}`);
     }
   },
@@ -98,6 +103,7 @@ const game = {
       game.statsDecrease();
       game.starveCondition();
       game.winOrLose();
+      console.log(game.currentTime);
     }, 1000);
   },
   statsChanger: function(speed) {
@@ -125,10 +131,18 @@ const game = {
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
-    } else if (this.speed === "Stopped" && this.food > 0 && this.health < 99) {
+    } else if (
+      this.speed === "Move very slowly" &&
+      this.food > 0 &&
+      this.health < 99
+    ) {
       this.food = food - 0.3;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
       this.distance = distance;
+      $("#distance").text(
+        `Distance Travelled: ${this.distance.toFixed(1)} miles`
+      );
+      this.distance = distance + 0.2;
       $("#distance").text(
         `Distance Travelled: ${this.distance.toFixed(1)} miles`
       );
@@ -221,13 +235,13 @@ const game = {
       const $interactionDiv = $(".boxInfo");
       $(".game-screen").hide();
       const $interaction1 = $(
-        "<h1 id='boxstatement'>You've found a crate on the side of the road!</h1>"
+        "<h1 id='boxstatement'>You've found a crate and barrel on the side of the road!</h1>"
       );
       const $interaction1Quest = $(
         "<h2 id='boxquestion'>Would you like to open it at your own risk?</h2>"
       );
       const $interaction1Image = $(
-        "<img id='empty-crate' src='https://media.istockphoto.com/vectors/wooden-box-vector-id525222158?k=6&m=525222158&s=612x612&w=0&h=j15ZHXP7Y-9VSLkcto5On4CgClEhZb-8Eq1QyWDKDY8='>"
+        "<img id='empty-crate' src='https://i.pinimg.com/originals/6c/09/b3/6c09b3d12f557bf77722c3f4acddba3e.jpg'>"
       );
       const $yesButton = $("<button id='yesBox'>Yes</button>");
       const $noButton = $("<button id='noBox'>No</button>");
@@ -296,7 +310,7 @@ const game = {
         $(".boxInfo").append($goodStatus);
         $(".boxInfo").append(
           $(
-            "<img id='box-food' src='https://media.istockphoto.com/vectors/wooden-crate-with-vegetables-and-fruits-healthy-lifestyle-vector-id872797682?k=6&m=872797682&s=612x612&w=0&h=RBRmFOCRloSF16rWowwavFnAZuCi361PIjGtShH3zpw='>"
+            "<img id='box-food' src='https://www.jing.fm/clipimg/detail/12-126337_b-fruit-clipart-food-clipart-garden-clipart.png'>"
           )
         );
         $(".boxInfo").append($("<button class='boxOk'>Ok</button>"));
@@ -307,7 +321,7 @@ const game = {
       removeStuff();
       const $interactionDiv = $(".boxInfo");
       const $interaction1Image = $(
-        "<img id='empty-crate' src='https://media.istockphoto.com/vectors/wooden-box-vector-id525222158?k=6&m=525222158&s=612x612&w=0&h=j15ZHXP7Y-9VSLkcto5On4CgClEhZb-8Eq1QyWDKDY8='>"
+        "<img id='empty-crate' src='https://i.pinimg.com/originals/6c/09/b3/6c09b3d12f557bf77722c3f4acddba3e.jpg'>"
       );
       $interactionDiv.append(
         "<h1>You decided to leave the crate alone and proceed on. </h1>"
@@ -630,7 +644,6 @@ const game = {
     }
   },
   winOrLose: function() {
-    clearInterval(this.playerTimer);
     if (this.distance >= 70 && this.health > 0 && this.days <= 10) {
       $(".game").hide();
       const $winDiv = $(".win");
@@ -646,7 +659,7 @@ const game = {
       $loseDiv.append($("<h1>You didn't make it to Oregon. Try again.</h1>"));
       $loseDiv.append(
         $(
-          "<img src='https://akns-images.eonline.com/eol_images/Entire_Site/201507/rs_560x415-150107143918-1024.Oregon-Trail-Game-MS-Dos.jl.010715.jpg?fit=inside|900:auto&output-quality=90'>"
+          "<img src='https://media0.giphy.com/media/3oz8xBKJFKAXB6JAm4/source.gif'>"
         )
       );
     }
@@ -673,10 +686,11 @@ $("body").on("click", "#stroll-button", function() {
 });
 
 $("body").on("click", "#stop-button", function() {
-  game.decideSpeed("stop");
+  game.decideSpeed("Move very slowly");
 });
 
 $("body").on("click", "#yesStart", function() {
+  game.timer();
   game.decideSpeed("walk");
   $("#yesStart").remove();
 
@@ -696,14 +710,14 @@ $("body").on("click", "#yesStart", function() {
     $walkButtons.append($("<button id='run-button'>Run</button>"));
     $walkButtons.append($("<button id='walk-button'>Walk</button>"));
     $walkButtons.append($("<button id='stroll-button'>Stroll</button>"));
-    $walkButtons.append($("<button id='stop-button'>Rest</button>"));
+    $walkButtons.append(
+      $("<button id='stop-button'>Move very slowly (Gain HP)</button>")
+    );
   }
 
   setTimeout(function() {
     game.interact(1);
   }, 25000);
-
-  game.timer();
 });
 
 $("body").on("click", "#yesBox", function() {

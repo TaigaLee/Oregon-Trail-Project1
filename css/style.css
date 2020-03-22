@@ -187,3 +187,35 @@ button {
 #okHunt {
   margin-top: 30px;
 }
+
+#cows {
+  -webkit-animation: walk-west 1s steps(2) infinite;
+  z-index: 1;
+}
+
+.main-game-image {
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
+}
+
+#main-game-image {
+  z-index: -1;
+}
+
+.cowswalking {
+  top: 180px;
+  left: 750px;
+  position: absolute;
+  height: 200px;
+  width: 350px;
+  overflow: hidden;
+}
+
+#box-food {
+  height: 400px;
+}
+
+#empty-crate {
+  height: 400px;
+}
