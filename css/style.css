@@ -44,6 +44,8 @@ body {
 }
 
 button {
+  font-family: "Anton", sans-serif;
+  font-size: 12px;
   width: 10em;
   height: 5em;
   border-radius: 25px;

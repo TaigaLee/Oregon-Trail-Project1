@@ -163,11 +163,7 @@ const game = {
   statsChanger: function(speed) {
     let distance = this.distance;
     let food = this.food;
-    if (
-      this.speed === "Running" &&
-      this.food > 0.8 &&
-      this.wagon.heatlh > 0.4
-    ) {
+    if (this.speed === "Running" && this.food > 0) {
       this.wagon.health -= 0.4;
       this.food = food - 0.8;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -175,11 +171,7 @@ const game = {
       $("#distance").text(
         `Distance Traveled: ${this.distance.toFixed(1)} miles`
       );
-    } else if (
-      this.speed === "Walking" &&
-      this.food > 0.5 &&
-      this.wagon.heatlh > 0.3
-    ) {
+    } else if (this.speed === "Walking" && this.food > 0) {
       this.wagon.health -= 0.3;
       this.food = food - 0.5;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -187,11 +179,7 @@ const game = {
       $("#distance").text(
         `Distance Traveled: ${this.distance.toFixed(1)} miles`
       );
-    } else if (
-      this.speed === "Strolling" &&
-      this.food > 0 &&
-      this.wagon.health > 0.2
-    ) {
+    } else if (this.speed === "Strolling" && this.food > 0) {
       this.wagon.health -= 0.2;
       this.food = food - 0.4;
       $("#food").text(`Food: ${this.food.toFixed(1)}`);
@@ -202,9 +190,8 @@ const game = {
       $("#hp").text(`HP: ${this.health.toFixed(1)}`);
     } else if (
       this.speed === "Moving very slowly" &&
-      this.food > 0.3 &&
-      this.health < 99 &&
-      this.wagon.health > 0.1
+      this.food > 0 &&
+      this.health < 99
     ) {
       this.wagon.health -= 0.1;
       this.food = food - 0.3;
