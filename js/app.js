@@ -98,6 +98,7 @@ const game = {
       game.statsChanger();
       game.statsDecrease();
       game.starveCondition();
+      game.winOrLose();
     }, 1000);
   },
   statsChanger: function(speed) {
@@ -631,6 +632,27 @@ const game = {
         $("#goToStore").remove();
       }
     }
+  },
+  winOrLose: function() {
+    if (this.distance >= 70 && this.health > 0 && this.days <= 10) {
+      $(".game").hide();
+      const $winDiv = $(".win");
+      $winDiv.append($("<h1>Congrats! You've made it to Oregon!</h1>"));
+      $winDiv.append(
+        $(
+          "<img src='https://cdn.vox-cdn.com/thumbor/5UOEwi1yQauMOb0fD5bqGqmLcbA=/1400x0/filters:no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/3378408/hangingoutwithoxen.0.png'>"
+        )
+      );
+    } else if (this.health <= 0 || this.days > 10) {
+      $(".game").hide();
+      const $loseDiv = $(".lose");
+      $loseDiv.append($("<h1>You didn't make it to Oregon. Try again.</h1>"));
+      $loseDiv.append(
+        $(
+          "<img src='https://akns-images.eonline.com/eol_images/Entire_Site/201507/rs_560x415-150107143918-1024.Oregon-Trail-Game-MS-Dos.jl.010715.jpg?fit=inside|900:auto&output-quality=90'>"
+        )
+      );
+    }
   }
 };
 
@@ -754,8 +776,4 @@ $("body").on("click", "#okHunt", function() {
   $(".hunt").hide();
   game.resumeGame();
   setTimeout(game.randomVoiceLines(3), 5000);
-});
-
-$("body").on("click", function(event) {
-  console.log(event.target);
 });
